@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surbag Froobager</title>
+
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        /* outline: 1px solid red; */
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      #game-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #game {
+        width: 500px;
+        margin: auto;
+      }
+      #header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        padding: 10px;
+        border-bottom: 2px solid black;
+      }
+      #slots {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+      }
+      .slot {
+        width: 33%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .slot img {
+        min-width: 100px;
+        image-rendering: pixelated;
+      }
+
+      .slot-contents:hover {
+        background: lightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <div id="game">
+        <div id="header">
+          <div id="command">Select the <b>Froobager</b></div>
+          <div id="time-remaining">
+            Time remaining: <span id="time">1000</span>
+          </div>
+        </div>
+        <div id="slots">
+          <div class="slot zero">
+            <div class="slot-contents">
+              <img data-id="0" data-type="image" src="images/01.png" />
+            </div>
+          </div>
+          <div class="slot one">
+            <div class="slot-contents">
+              <img data-id="1" data-type="image" src="images/02.png" />
+            </div>
+          </div>
+          <div class="slot two">
+            <div class="slot-contents">
+              <img data-id="2" data-type="image" src="images/03.png" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      const ROUND_DURATION_MS = 10 * 1000;
+      let roundNumber = 0;
+      let timerId = null;
+
+      const $time = document.getElementById("time");
+      const $slots = document.getElementById("slots");
+
+      $slots.addEventListener("click", (e) => {
+        if (e.target.dataset.type === "image") {
+          console.log(e.target.dataset.id);
+          endRound();
+        }
+      });
+
+      function startTimer() {
+        const startTime = Date.now();
+
+        timerId = window.setInterval(() => {
+          const msElapsed = Date.now() - startTime;
+
+          if (msElapsed >= ROUND_DURATION_MS) {
+            endRound();
+          }
+
+          // Clamp at zero
+          $time.textContent = Math.max(0, ROUND_DURATION_MS - msElapsed);
+        }, 10);
+      }
+
+      function stopTimer() {
+        window.clearInterval(timerId);
+      }
+
+      function startRound() {
+        roundNumber += 1;
+        console.log("Starting round", roundNumber);
+        startTimer();
+        randomizeImages();
+      }
+
+      function endRound() {
+        stopTimer();
+        startRound();
+      }
+
+      function randomizeImages() {
+        $slots.querySelectorAll("img").forEach(($img) => {
+          const n = Math.floor(Math.random() * 5) + 1;
+          $img.src = `images/${n.toString().padStart(2, 0)}.png`;
+        });
+      }
+
+      //   Kick if off
+      startRound();
+    </script>
+  </body>
+</html>
