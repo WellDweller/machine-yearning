@@ -7,17 +7,6 @@
     <title>Surbag Froobager</title>
 
     <style>
-      /*
-        TODO
-        - variable spacing
-        - dynamic grid setting
-        - hsl colors
-        - round end
-        - requestAnimationFrame for timer instead of setInterval
-        - Game begin state
-        - Game end state
-      */
-
       :root {
         --white: #fff;
         --blue: hsl(214, 70%, 56%);
@@ -96,12 +85,20 @@
         padding: 1.2rem;
       }
 
+      #slots-container {
+        aspect-ratio: 1;
+        margin: 0.6rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
       #slots {
         display: grid;
         /* We'll need to update this value in response to the number of items */
         grid-template-columns: 1fr 1fr;
         gap: 0.6rem;
-        padding: 0.6rem 0;
+        width: 100%;
       }
       .slot {
         width: 100%;
@@ -110,13 +107,23 @@
         user-select: none;
       }
 
+      .slot.selected {
+        border: 1px solid var(--green);
+        outline: 1px solid var(--green);
+      }
+
       .slot:hover {
-        background-color: var(--green);
+        background-color: var(--lightGrey);
       }
 
       .slot img {
         width: 100%;
         image-rendering: pixelated;
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
       }
 
       footer {
@@ -150,15 +157,17 @@
             </div>
           </div>
         </header>
-        <div id="slots">
-          <div class="slot">
-            <img data-id="0" data-type="image" src="images/01.png" />
-          </div>
-          <div class="slot">
-            <img data-id="1" data-type="image" src="images/02.png" />
-          </div>
-          <div class="slot">
-            <img data-id="2" data-type="image" src="images/03.png" />
+        <div id="slots-container">
+          <div id="slots">
+            <div class="slot">
+              <img data-id="0" data-type="image" src="images/01.png" />
+            </div>
+            <div class="slot">
+              <img data-id="1" data-type="image" src="images/02.png" />
+            </div>
+            <div class="slot">
+              <img data-id="2" data-type="image" src="images/03.png" />
+            </div>
           </div>
         </div>
         <footer>

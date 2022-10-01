@@ -1,5 +1,14 @@
 import { get_random_int_in_range } from "./utils.js";
 
+/*
+- color transformation
+- round end
+- requestAnimationFrame for timer instead of setInterval
+- Game begin state
+- Game end state
+- variable spacing
+*/
+
 const ROUND_DURATION_MS = 10 * 1000;
 let roundNumber = 0;
 let timerId = null;
@@ -15,8 +24,8 @@ $submitButton.addEventListener("click", (e) => {
 
 $slots.addEventListener("click", (e) => {
   if (e.target.dataset.type === "image") {
-    console.log(e.target.dataset.id);
-    endRound();
+    // TODO: need to track selection somewhere, or pull on submit
+    e.target.parentElement.classList.toggle("selected");
   }
 });
 
@@ -45,7 +54,7 @@ function startRound() {
 
   setupSlots(get_random_int_in_range(3, 9));
 
-  startTimer();
+  // startTimer();
 }
 
 function endRound() {
