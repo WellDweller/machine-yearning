@@ -1,8 +1,8 @@
+import { get_random_int_in_range } from "./utils.js";
+
 const ROUND_DURATION_MS = 10 * 1000;
 let roundNumber = 0;
 let timerId = null;
-
-const NUM_SLOTS = 3;
 
 const $time = document.getElementById("time");
 const $slots = document.getElementById("slots");
@@ -43,7 +43,7 @@ function startRound() {
   roundNumber += 1;
   console.log("Starting round", roundNumber);
 
-  setupSlots(NUM_SLOTS);
+  setupSlots(get_random_int_in_range(3, 9));
 
   startTimer();
 }
@@ -65,6 +65,11 @@ function setupSlots(numSlots) {
     const $slot = createSlotElement(src, i);
     $slots.appendChild($slot);
   }
+
+  //   TODO: feels janky
+  const numCols = numSlots === 4 ? 2 : 3;
+
+  $slots.style.gridTemplateColumns = "1fr ".repeat(numCols);
 }
 
 function clearSlots() {
