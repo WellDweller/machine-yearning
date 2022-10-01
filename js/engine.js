@@ -18,7 +18,8 @@ RULES example:
 }
 */
 
-import * as array_utils from './utils.js';
+import * as audio from './audio.js';
+import * as utils from './utils.js';
 
 var p = console.log;
 
@@ -157,7 +158,7 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
     // Shapes are different and *must* be defined before the transformations,
     // so we skip them here.
     if (new_rule_type !== undefined && new_rule_type != "shape") {
-      var rule_value = array_utils.get_random_item(undefined_rules);
+      var rule_value = utils.get_random_item(undefined_rules);
       undefined_rules.delete(rule_value);
       answer[new_rule_type] = rule_value;
       answer.shape = transform_image(answer.shape, new_rule_type, rule_value);
@@ -224,7 +225,7 @@ function get_random_fully_transformed_answer() {
     if (Object.keys(RULES[key]).length == 0) {
       continue;
     }
-    rule_constraints[key] = RULES[key][array_utils.get_random_key(RULES[key])];
+    rule_constraints[key] = RULES[key][utils.get_random_key(RULES[key])];
   }
   var prompt = get_prompt(rule_constraints);
   return {
@@ -242,7 +243,7 @@ window.get_existing_rule_round = function(total_answers) {
 
   // We don't want the winning answer to always be at the beginning!
   var correct_answer = answers[0];
-  answers = array_utils.shuffle(answers);
+  answers = utils.shuffle(answers);
 
 
   return {
