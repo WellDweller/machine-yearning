@@ -20,13 +20,21 @@ RULES example:
 
 import * as array_utils from './array_utils.js';
 
+var p = console.log;
+
 var POTENTIAL_RULES = {
   color: [
     "red", "blue", "green", "orange", "pink", "purple", "yellow"
+  ],
+  rotation: [
+    "upright", "right", "upside_down", "left"
+  ],
+  size: [
+    "small", "medium", "large"
   ]
 }
 
-var RULES = {
+export var RULES = {
   shape: {},
   color: {},
   rotation: {},
@@ -88,13 +96,13 @@ function transform_image(image, rule_type, rule_value) {
 }
 
 function get_random_word() {
-  consonants = 'bcdfghjklmnpqrstvwxz';
-  vowels = 'aeiou';
-  min = 3;
-  max = 7;
-  length = Math.random() * (max - min) + min;
-  word = '';
-  pick_from_consonants = true;
+  var consonants = 'bcdfghjklmnpqrstvwxz';
+  var vowels = 'aeiou';
+  var min = 3;
+  var max = 7;
+  var length = Math.random() * (max - min) + min;
+  var word = '';
+  var pick_from_consonants = true;
   for (var i = 0; i < length; i++) {
     if (pick_from_consonants) {
       word += consonants.charAt(Math.floor(Math.random() * consonants.length));
@@ -108,6 +116,24 @@ function get_random_word() {
 
 function get_image(rule_constraints, new_rule_type) {
   return get_random_image();
+}
+
+window.get_prompt = function(rule_constraints, new_rule_word) {
+  var prompt = new_rule_word === undefined ? "Verify the" : "Define the";
+  for (const rule_type in rule_constraints) {
+    // Shape should always come last, because english.
+    if (rule_type == "shape") {
+      continue;
+    }
+    prompt += " " + get_word_for_rule(rule_type, rule_constraints[rule_type]);
+  }
+  if (new_rule_word !== undefined) {
+    prompt += " " + new_rule_word;
+  }
+  if ("shape" in rule_constraints) {
+    prompt += " " + get_word_for_rule("shape", rule_constraints.shape);
+  }
+  return prompt;
 }
 
 // Try to get `n` number of potential answers.  If new_rule_type is undefined, we will attempt
@@ -143,7 +169,10 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
     }
 
     // New rule transformations
-    if (new_rule_type !== undefined) {
+    //
+    // Shapes are different and *must* be defined before the transformations,
+    // so we skip them here.
+    if (new_rule_type !== undefined && new_rule_type != "shape") {
       var rule_value = array_utils.get_random_item(undefined_rules);
       undefined_rules.delete(rule_value);
       answer[new_rule_type] = rule_value;
@@ -159,23 +188,14 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
 // All answers must fit these rules.)
 //
 // new_rule_type -- the rule we're having the user choose(e.g. "size").
-function get_new_rule_round(rule_constraints, new_rule_type) {
-  word = get_random_word();
-  num_images = 3;
-  answers = []
-  for (var i = 0; i < num_images; i++) {
-    answers.push({
-      image: get_random_image(),
-      // rule key
-      // rule value
-    });
-  }
+window.get_new_rule_round = function (rule_constraints, new_rule_type) {
+  var word = get_random_word();
+  var num_images = 3;
+  var answers = get_n_answers(3, rule_constraints, new_rule_type);
+  var prompt = get_prompt(rule_constraints, word);
   return {
-    definition: {
-      type: rule_type,
-      name: word,
-    },
-    prompt: `Define the ${word}`,
+    word: word,
+    prompt: prompt,
     answers: answers,
   }
 }
@@ -234,10 +254,32 @@ function get_existing_rule_round() {
 
 //
 //
-// Dummy test data
+// Testing
 //
 //
 
+// Round 1
+var rule_constraints = {};
+var rule_type = "shape";
+var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
+console.log(">>> " + new_rule_round.prompt);
+var answer = new_rule_round.answers[0];
+console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.shape}`);
+define_rule(rule_type, new_rule_round.word, answer.shape);
+
+// Round 2
+var rule_constraints = {shape: answer.shape};
+var rule_type = "color";
+var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
+console.log(">>> " + new_rule_round.prompt);
+var answer = new_rule_round.answers[0];
+console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`);
+define_rule(rule_type, new_rule_round.word, answer.color);
+
+// Miscellaneous testing.
+p(" ");
+p(" ");
+p(" ");
 define_rule("shape", "frobus", "data://frobus.jpg");
 define_rule("shape", "blenny", "data://blenny.jpg");
 console.log(get_word_for_rule("shape", "data://frobus.jpg"));
