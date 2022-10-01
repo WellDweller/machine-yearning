@@ -104,24 +104,19 @@
         padding: 0.6rem 0;
       }
       .slot {
-        /* display: flex;
-        justify-content: center;
-        align-items: center; */
+        width: 100%;
+        aspect-ratio: 1;
+        border: 1px solid var(--grey);
+        user-select: none;
+      }
+
+      .slot:hover {
+        background-color: var(--green);
       }
 
       .slot img {
         width: 100%;
         image-rendering: pixelated;
-      }
-
-      .slot-contents {
-        /* background-color: var(--lightGrey); */
-        border: 1px solid var(--grey);
-        user-select: none;
-      }
-
-      .slot-contents:hover {
-        background-color: var(--green);
       }
 
       footer {
@@ -156,27 +151,21 @@
           </div>
         </header>
         <div id="slots">
-          <div class="slot zero">
-            <div class="slot-contents">
-              <img data-id="0" data-type="image" src="images/01.png" />
-            </div>
+          <div class="slot">
+            <img data-id="0" data-type="image" src="images/01.png" />
           </div>
-          <div class="slot one">
-            <div class="slot-contents">
-              <img data-id="1" data-type="image" src="images/02.png" />
-            </div>
+          <div class="slot">
+            <img data-id="1" data-type="image" src="images/02.png" />
           </div>
-          <div class="slot two">
-            <div class="slot-contents">
-              <img data-id="2" data-type="image" src="images/03.png" />
-            </div>
+          <div class="slot">
+            <img data-id="2" data-type="image" src="images/03.png" />
           </div>
         </div>
         <footer>
           <div id="time-remaining">
             <span id="time" class="text">1000</span>
           </div>
-          <button><span class="text">Verify</span></button>
+          <button id="submit"><span class="text">Verify</span></button>
         </footer>
       </div>
     </div>

@@ -2,8 +2,16 @@ const ROUND_DURATION_MS = 10 * 1000;
 let roundNumber = 0;
 let timerId = null;
 
+const NUM_SLOTS = 3;
+
 const $time = document.getElementById("time");
 const $slots = document.getElementById("slots");
+const $submitButton = document.getElementById("submit");
+
+$submitButton.addEventListener("click", (e) => {
+  console.log("Do something on submit");
+  endRound();
+});
 
 $slots.addEventListener("click", (e) => {
   if (e.target.dataset.type === "image") {
@@ -34,8 +42,10 @@ function stopTimer() {
 function startRound() {
   roundNumber += 1;
   console.log("Starting round", roundNumber);
+
+  setupSlots(NUM_SLOTS);
+
   startTimer();
-  randomizeImages();
 }
 
 function endRound() {
@@ -43,11 +53,37 @@ function endRound() {
   startRound();
 }
 
-function randomizeImages() {
-  $slots.querySelectorAll("img").forEach(($img) => {
-    const n = Math.floor(Math.random() * 5) + 1;
-    $img.src = `images/${n.toString().padStart(2, 0)}.png`;
-  });
+function getRandomImageSrc() {
+  const n = Math.floor(Math.random() * 5) + 1;
+  return `images/${n.toString().padStart(2, 0)}.png`;
+}
+
+function setupSlots(numSlots) {
+  clearSlots();
+  for (let i = 0; i < numSlots; i++) {
+    const src = getRandomImageSrc();
+    const $slot = createSlotElement(src, i);
+    $slots.appendChild($slot);
+  }
+}
+
+function clearSlots() {
+  while ($slots.firstChild) {
+    $slots.removeChild($slots.firstChild);
+  }
+}
+
+function createSlotElement(src, index) {
+  const $slot = document.createElement("div");
+  $slot.insertAdjacentHTML(
+    "beforeEnd",
+    /*html*/ `
+        <div class="slot">
+            <img src="${src}" data-id="${index}" data-type="image" />
+        </div>
+    `
+  );
+  return $slot;
 }
 
 //   Kick if off
