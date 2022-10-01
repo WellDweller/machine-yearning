@@ -64,84 +64,12 @@ function get_fake_word_for_rule(rule_type, value) {
   console.log(`Could not find value ${value} for rule type ${rule_type}`);
 }
 
-// Gets all rules that haven't been defined for a particular rule type
-// (e.g. all colors the user hasn't defined yet).
-function get_undefined_rules(rule_type) {
-  var available_rules = new Set(POTENTIAL_RULES[rule_type]);
-  for (const name in RULES[rule_type]) {
-    var value = get_rule(rule_type, name);
-    available_rules.delete(value);
-  }
-  return available_rules;
-}
-
-// Probably want a way to control which rules should be varied.  And get back what actual rules
-// each image fits.
-//
-// Also need a way to specify an *existing* image for modification (e.g. a blue "florbon").
-function get_random_image() {
-  var result = 'data://';
-  var characters  = 'abcdefghijklmnopqrstuvwxyz';
-  for (var i = 0; i < 12; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
-function transform_answer(rule_constraints) {
-  // Color
-  if ("color" in rule_constraints) {
-    rule_constraints.shape = transform_image(
-      rule_constraints.shape, "color", rule_constraints.color);
-  }
-  return rule_constraints.shape;
-}
-
-// I hate all of this code.  The entire file.  Kill me.
-function get_random_fully_transformed_answer() {
-  var rule_constraints = {};
-  for (const key in RULES) {
-    if (Object.keys(RULES[key]).length == 0) {
-      continue;
-    }
-    rule_constraints[key] = RULES[key][array_utils.get_random_key(RULES[key])];
-  }
-  var prompt = get_prompt(rule_constraints);
-  return {
-    name: prompt,
-    shape: transform_answer(rule_constraints)
-  };
-}
-
 function transform_image(image, rule_type, rule_value) {
   // TODO: Make it actually blue.
   if (rule_type == "color") {
     image += "." + rule_value;
   }
   return image;
-}
-
-function get_random_word() {
-  var consonants = 'bcdfghjklmnpqrstvwxz';
-  var vowels = 'aeiou';
-  var min = 3;
-  var max = 7;
-  var length = Math.random() * (max - min) + min;
-  var word = '';
-  var pick_from_consonants = true;
-  for (var i = 0; i < length; i++) {
-    if (pick_from_consonants) {
-      word += consonants.charAt(Math.floor(Math.random() * consonants.length));
-    } else {
-      word += vowels.charAt(Math.floor(Math.random() * vowels.length));
-    }
-    pick_from_consonants = !pick_from_consonants;
-  }
-  return word;
-}
-
-function get_image(rule_constraints, new_rule_type) {
-  return get_random_image();
 }
 
 window.get_prompt = function(rule_constraints, new_rule_word) {
@@ -160,6 +88,36 @@ window.get_prompt = function(rule_constraints, new_rule_word) {
     words.push(get_fake_word_for_rule("shape", rule_constraints.shape));
   }
   return words.join(' ');
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// New Rule Round
+//
+//
+
+// Probably want a way to control which rules should be varied.  And get back what actual rules
+// each image fits.
+//
+// Also need a way to specify an *existing* image for modification (e.g. a blue "florbon").
+function get_random_image() {
+  var result = 'data://';
+  var characters  = 'abcdefghijklmnopqrstuvwxyz';
+  for (var i = 0; i < 12; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
+// Gets all rules that haven't been defined for a particular rule type
+// (e.g. all colors the user hasn't defined yet).
+function get_undefined_rules(rule_type) {
+  var available_rules = new Set(POTENTIAL_RULES[rule_type]);
+  for (const name in RULES[rule_type]) {
+    var value = get_rule(rule_type, name);
+    available_rules.delete(value);
+  }
+  return available_rules;
 }
 
 // Try to get `n` number of potential answers.  If new_rule_type is undefined, we will attempt
@@ -210,6 +168,25 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
   return answers;
 }
 
+function get_random_word() {
+  var consonants = 'bcdfghjklmnpqrstvwxz';
+  var vowels = 'aeiou';
+  var min = 3;
+  var max = 7;
+  var length = Math.random() * (max - min) + min;
+  var word = '';
+  var pick_from_consonants = true;
+  for (var i = 0; i < length; i++) {
+    if (pick_from_consonants) {
+      word += consonants.charAt(Math.floor(Math.random() * consonants.length));
+    } else {
+      word += vowels.charAt(Math.floor(Math.random() * vowels.length));
+    }
+    pick_from_consonants = !pick_from_consonants;
+  }
+  return word;
+}
+
 // rule_constraints -- a map of the type of rule to a rule value (e.g. {color: "blue"}.
 // All answers must fit these rules.)
 //
@@ -224,6 +201,37 @@ window.get_new_rule_round = function (rule_constraints, new_rule_type) {
     prompt: prompt,
     answers: answers,
   }
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Existing Rule Round
+//
+//
+
+function transform_answer(rule_constraints) {
+  // Color
+  if ("color" in rule_constraints) {
+    rule_constraints.shape = transform_image(
+      rule_constraints.shape, "color", rule_constraints.color);
+  }
+  return rule_constraints.shape;
+}
+
+// I hate all of this code.  The entire file.  Kill me.
+function get_random_fully_transformed_answer() {
+  var rule_constraints = {};
+  for (const key in RULES) {
+    if (Object.keys(RULES[key]).length == 0) {
+      continue;
+    }
+    rule_constraints[key] = RULES[key][array_utils.get_random_key(RULES[key])];
+  }
+  var prompt = get_prompt(rule_constraints);
+  return {
+    name: prompt,
+    shape: transform_answer(rule_constraints)
+  };
 }
 
 window.get_existing_rule_round = function() {
@@ -247,7 +255,7 @@ window.get_existing_rule_round = function() {
   }
 }
 
-//
+///////////////////////////////////////////////////////////////////////
 //
 // Testing
 //
@@ -266,7 +274,7 @@ define_rule(rule_type, new_rule_round.word, answer.shape);
 var existing_rule_round = get_existing_rule_round();
 console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
-// Round 2 (new rule)
+// Round 4 (new rule)
 var rule_constraints = {shape: answer.shape};
 var rule_type = "color";
 var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
@@ -275,7 +283,7 @@ var answer = new_rule_round.answers[0];
 console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`);
 define_rule(rule_type, new_rule_round.word, answer.color);
 
-// Round 3 (existing rules)
+// Round 5 (existing rules)
 var existing_rule_round = get_existing_rule_round();
 console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
