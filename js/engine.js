@@ -191,9 +191,8 @@ function get_random_word() {
 // All answers must fit these rules.)
 //
 // new_rule_type -- the rule we're having the user choose(e.g. "size").
-window.get_new_rule_round = function (rule_constraints, new_rule_type) {
+window.get_new_rule_round = function (rule_constraints, new_rule_type, num_images) {
   var word = get_random_word();
-  var num_images = 3;
   var answers = get_n_answers(3, rule_constraints, new_rule_type);
   var prompt = get_prompt(rule_constraints, word);
   return {
@@ -234,10 +233,7 @@ function get_random_fully_transformed_answer() {
   };
 }
 
-window.get_existing_rule_round = function() {
-
-  // The total number of answers to return
-  var total_answers = 3;
+window.get_existing_rule_round = function(total_answers) {
 
   var answers = [];
   for (var i = 0; i < total_answers; i++) {
@@ -264,27 +260,27 @@ window.get_existing_rule_round = function() {
 // Round 1 (new rule)
 var rule_constraints = {};
 var rule_type = "shape";
-var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
+var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
 console.log(">>> Define the " + new_rule_round.prompt);
 var answer = new_rule_round.answers[0];
 console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.shape}`);
 define_rule(rule_type, new_rule_round.word, answer.shape);
 
-// Round 3 (existing rules)
-var existing_rule_round = get_existing_rule_round();
+// Round 2 (existing rules)
+var existing_rule_round = get_existing_rule_round(3);
 console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
-// Round 4 (new rule)
+// Round 3 (new rule)
 var rule_constraints = {shape: answer.shape};
 var rule_type = "color";
-var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
+var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
 console.log(">>> Define the " + new_rule_round.prompt);
 var answer = new_rule_round.answers[0];
 console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`);
 define_rule(rule_type, new_rule_round.word, answer.color);
 
-// Round 5 (existing rules)
-var existing_rule_round = get_existing_rule_round();
+// Round 4 (existing rules)
+var existing_rule_round = get_existing_rule_round(3);
 console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
 // Miscellaneous testing.
