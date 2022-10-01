@@ -20,12 +20,18 @@ export function get_random_item(array_or_set) {
   return keys[Math.floor(Math.random() * keys.length)];
 }
 
-export function get_random_in_range(min, max){
+export function get_random_in_range(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-export function get_random_int_in_range(min, max){
+export function get_random_int_in_range(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function get_random_key(obj) {
+  let keys = Object.keys(obj);
+  return keys[Math.floor(Math.random() * keys.length)];
+
 }

@@ -18,7 +18,7 @@ RULES example:
 }
 */
 
-import * as array_utils from './array_utils.js';
+import * as array_utils from './utils.js';
 
 var p = console.log;
 
@@ -34,7 +34,7 @@ var POTENTIAL_RULES = {
   ]
 }
 
-export var RULES = {
+window.RULES = {
   shape: {},
   color: {},
   rotation: {},
@@ -54,7 +54,8 @@ function get_rule(rule_type, name) {
   return RULES[rule_type][name];
 }
 
-function get_word_for_rule(rule_type, value) {
+// Given a real word (i.e. "blue"), get the fake word associated with it.
+function get_fake_word_for_rule(rule_type, value) {
   for (const key in RULES[rule_type]) {
     if (value == RULES[rule_type][key]) {
       return key;
@@ -85,6 +86,31 @@ function get_random_image() {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return result;
+}
+
+function transform_answer(rule_constraints) {
+  // Color
+  if ("color" in rule_constraints) {
+    rule_constraints.shape = transform_image(
+      rule_constraints.shape, "color", rule_constraints.color);
+  }
+  return rule_constraints.shape;
+}
+
+// I hate all of this code.  The entire file.  Kill me.
+function get_random_fully_transformed_answer() {
+  var rule_constraints = {};
+  for (const key in RULES) {
+    if (Object.keys(RULES[key]).length == 0) {
+      continue;
+    }
+    rule_constraints[key] = RULES[key][array_utils.get_random_key(RULES[key])];
+  }
+  var prompt = get_prompt(rule_constraints);
+  return {
+    name: prompt,
+    shape: transform_answer(rule_constraints)
+  };
 }
 
 function transform_image(image, rule_type, rule_value) {
@@ -119,21 +145,21 @@ function get_image(rule_constraints, new_rule_type) {
 }
 
 window.get_prompt = function(rule_constraints, new_rule_word) {
-  var prompt = new_rule_word === undefined ? "Verify the" : "Define the";
+  var words = []
   for (const rule_type in rule_constraints) {
     // Shape should always come last, because english.
     if (rule_type == "shape") {
       continue;
     }
-    prompt += " " + get_word_for_rule(rule_type, rule_constraints[rule_type]);
+    words.push(get_fake_word_for_rule(rule_type, rule_constraints[rule_type]));
   }
   if (new_rule_word !== undefined) {
-    prompt += " " + new_rule_word;
+    words.push(new_rule_word);
   }
   if ("shape" in rule_constraints) {
-    prompt += " " + get_word_for_rule("shape", rule_constraints.shape);
+    words.push(get_fake_word_for_rule("shape", rule_constraints.shape));
   }
-  return prompt;
+  return words.join(' ');
 }
 
 // Try to get `n` number of potential answers.  If new_rule_type is undefined, we will attempt
@@ -200,55 +226,24 @@ window.get_new_rule_round = function (rule_constraints, new_rule_type) {
   }
 }
 
-// For now, only supports shapes.
-function get_existing_rule_round() {
-  var keys = Object.keys(RULES['shape']);
-
-  // The list of images we will build up and return
-  answers = [];
-
-  // We will try to find this many existing rules to return, if possible
-  num_existing = 2;
-  num_existing = Math.min(num_existing, Object.keys(RULES['shape']).length);
+window.get_existing_rule_round = function() {
 
   // The total number of answers to return
-  total_answers = 3;
+  var total_answers = 3;
 
-  // Pick an answer
-  keys = array_utils.shuffle(keys);
-  answer = keys[0];
-  answers.push({
-    name: answer,
-    image: RULES['shape'][answer]
-  })
-
-  // Pick any remaining existing rules
-  other_names = keys.slice(1, num_existing);
-  for (const name of other_names) {
-    answers.push({
-      name: name,
-      image: RULES['shape'][name]
-    })
+  var answers = [];
+  for (var i = 0; i < total_answers; i++) {
+    answers.push(get_random_fully_transformed_answer());
   }
 
-  // Fill out remainder with new names
-  for (var i = answers.length; i < total_answers; i++) {
-    answers.push({
-      name: get_random_word(),
-      image: get_random_image()
-    })
-  }
-
-  // We don't want the existing rules to always be at the beginning
+  // We don't want the winning answer to always be at the beginning!
+  var correct_answer = answers[0];
   answers = array_utils.shuffle(answers);
 
+
   return {
-    rule: {
-      type: "shape",
-    },
-    answer: answer,
     answers: answers,
-    prompt: `Find the ${answer}`,
+    correct_answer: correct_answer
   }
 }
 
@@ -258,23 +253,31 @@ function get_existing_rule_round() {
 //
 //
 
-// Round 1
+// Round 1 (new rule)
 var rule_constraints = {};
 var rule_type = "shape";
 var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
-console.log(">>> " + new_rule_round.prompt);
+console.log(">>> Define the " + new_rule_round.prompt);
 var answer = new_rule_round.answers[0];
 console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.shape}`);
 define_rule(rule_type, new_rule_round.word, answer.shape);
 
-// Round 2
+// Round 3 (existing rules)
+var existing_rule_round = get_existing_rule_round();
+console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
+
+// Round 2 (new rule)
 var rule_constraints = {shape: answer.shape};
 var rule_type = "color";
 var new_rule_round = get_new_rule_round(rule_constraints, rule_type);
-console.log(">>> " + new_rule_round.prompt);
+console.log(">>> Define the " + new_rule_round.prompt);
 var answer = new_rule_round.answers[0];
 console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`);
 define_rule(rule_type, new_rule_round.word, answer.color);
+
+// Round 3 (existing rules)
+var existing_rule_round = get_existing_rule_round();
+console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
 // Miscellaneous testing.
 p(" ");
@@ -282,7 +285,7 @@ p(" ");
 p(" ");
 define_rule("shape", "frobus", "data://frobus.jpg");
 define_rule("shape", "blenny", "data://blenny.jpg");
-console.log(get_word_for_rule("shape", "data://frobus.jpg"));
+console.log(get_fake_word_for_rule("shape", "data://frobus.jpg"));
 define_rule("color", "bleen", "blue");
 console.log(get_undefined_rules("color"));
 console.log(get_n_answers(3, {}));
