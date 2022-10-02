@@ -15,7 +15,7 @@ const ROUNDS = [
   {
     roundType: ROUND_TYPES.NEW_RULE,
     ruleType: "shape",
-    ruleConstraints: {},
+    rulesToBeConsistent: [],
     numAnswers: 3,
   },
   {
@@ -34,7 +34,7 @@ const ROUNDS = [
   {
     roundType: ROUND_TYPES.NEW_RULE,
     ruleType: "color",
-    ruleConstraints: {},
+    rulesToBeConsistent: ["shape"],
     numAnswers: 3,
   },
   {
@@ -60,15 +60,18 @@ export function get_round_data(roundNum) {
 
   if (round.roundType === ROUND_TYPES.NEW_RULE) {
     currentRoundData = get_new_rule_round(
-      round.ruleConstraints,
+      round.rulesToBeConsistent,
       round.ruleType,
       round.numAnswers
     );
-    console.log({ currentRoundData });
+    console.log({ round, currentRoundData });
     return currentRoundData;
   } else {
-    currentRoundData = get_existing_rule_round(round.numAnswers, round.rulesToRandomize);
-    console.log({ currentRoundData });
+    currentRoundData = get_existing_rule_round(
+      round.numAnswers,
+      round.rulesToRandomize
+    );
+    console.log({ round, currentRoundData });
     return currentRoundData;
   }
 }
@@ -111,7 +114,7 @@ function generateRandomRound(roundNumber) {
     round = {
       roundType: ROUND_TYPES.NEW_RULE,
       ruleType: "shape",
-      ruleConstraints: {},
+      ruleConstraints: [],
       numAnswers: get_random_int_in_range(4, 9),
     };
   } else {

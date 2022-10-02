@@ -46,6 +46,11 @@ export function define_rule(rule_type, name, value) {
   RULES[rule_type][name] = value;
 }
 
+function get_random_rule(rule_type) {
+  const random_name = utils.get_random_key(RULES[rule_type]);
+  return get_rule(rule_type, random_name);
+}
+
 function get_rule(rule_type, name) {
   console.assert(rule_type in RULES, `Unknown rule ${rule_type}`);
   // Purposefully allow undefined returns so calling logic can do something different
@@ -65,7 +70,9 @@ function get_fake_word_for_rule(rule_type, value) {
 
 // Return a rule's random value (i.e. real word, i.e. "blue")
 function get_random_potential_rule(rule_type) {
-  return POTENTIAL_RULES[rule_type][utils.get_random_key(POTENTIAL_RULES[rule_type])];
+  return POTENTIAL_RULES[rule_type][
+    utils.get_random_key(POTENTIAL_RULES[rule_type])
+  ];
 }
 
 function transform_image(image, rule_type, rule_value) {
@@ -186,10 +193,17 @@ function get_random_word() {
 //
 // new_rule_type -- the rule we're having the user choose(e.g. "size").
 export function get_new_rule_round(
-  rule_constraints,
+  rules_to_be_consistent,
   new_rule_type,
   num_images
 ) {
+  const rule_constraints = {};
+
+  for (const rule_type of rules_to_be_consistent) {
+    const random_rule = get_random_rule(rule_type);
+    rule_constraints[rule_type] = random_rule;
+  }
+
   var word_we_are_defining = get_random_word();
   var answers = get_n_answers(num_images, rule_constraints, new_rule_type);
   var prompt = get_prompt(rule_constraints, word_we_are_defining);
