@@ -175,6 +175,58 @@
         user-select: none;
       }
 
+      #modal {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+      }
+
+      #modal.hide {
+        display: none;
+      }
+
+      #modal-overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #modal-content-container {
+        background-color: var(--white);
+        width: 300px;
+        height: 500px;
+        border-radius: 4px;
+        padding: 1.8rem;
+        position: relative;
+      }
+
+      #modal-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        /* align-items: center; */
+        height: 100%;
+      }
+
+      #modal-content p {
+        line-height: 1.2rem;
+        margin: 1.2rem 0;
+      }
+
+      #modal-close {
+        display: inline;
+        font-size: 2rem;
+        position: absolute;
+        top: 1.2rem;
+        right: 1.2rem;
+        user-select: none;
+        cursor: pointer;
+      }
+
       /* #time-bar {
         border-radius: 0.2rem;
         width: 100%;
@@ -216,6 +268,36 @@
             </div>
           </div>
         </footer>
+      </div>
+      <div id="modal">
+        <div id="modal-overlay">
+          <div id="modal-content-container">
+            <div id="modal-close" data-action="modal-close">×</div>
+            <div id="modal-content">
+              <div class="modal-header">
+                <div class="big-text">LD 51 Game</div>
+              </div>
+              <div class="modal-body">
+                <p>
+                  You are a robot trying to solve captchas to prove that you are
+                  human.
+                </p>
+                <p>
+                  The only problem is,
+                  <b>you don't know what human words or images mean.</b>
+                </p>
+                <p>You have 10 seconds per captcha.</p>
+                <p>You can get 3 wrong.</p>
+                <p>Surely you will figure it out.</p>
+              </div>
+              <div class="modal-footer">
+                <button data-action="modal-close">
+                  <span class="text" data-action="modal-close">Begin</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>

@@ -25,7 +25,7 @@ let gameState = GAME_STATES.NOT_STARTED;
 let roundNumber = 0;
 let selectedIndex = null;
 let timerId = null;
-let lives = 3;
+let lives = STARTING_LIVES;
 
 const $time = document.getElementById("time");
 const $slots = document.getElementById("slots");
@@ -33,6 +33,15 @@ const $submitButton = document.getElementById("submit");
 const $prompt = document.getElementById("prompt");
 const $lives = document.getElementById("lives");
 const $roundCount = document.getElementById("round-count");
+const $modal = document.getElementById("modal");
+
+$modal.addEventListener("click", (e) => {
+  if (e.target.dataset.action === "modal-close") {
+    $modal.classList.add("hide");
+
+    startGame();
+  }
+});
 
 $submitButton.addEventListener("click", (e) => {
   endRound();
@@ -48,7 +57,7 @@ $slots.addEventListener("click", (e) => {
       } else {
         slot.classList.remove("selected");
       }
-      play("basic_click_02", true, 0.80);
+      play("basic_click_02", true, 0.8);
     });
   }
 });
@@ -59,13 +68,13 @@ function startTimer() {
   timerId = window.setInterval(() => {
     const msElapsed = Date.now() - startTime;
 
-    if (msElapsed >= ROUND_DURATION_MS) {
+    if (msElapsed >= ROUND_DURATION_MS && timerId) {
       endRound();
     }
 
     // Clamp at zero
     $time.textContent = Math.max(0, ROUND_DURATION_MS - msElapsed);
-  }, 10);
+  }, 100);
 }
 
 function stopTimer() {
@@ -83,18 +92,23 @@ function startRound() {
   $prompt.textContent = prompt;
   setupSlots(answers);
 
-  // startTimer();
+  startTimer();
 }
 
 function endRound() {
   stopTimer();
 
   if (selectedIndex === null) {
+    console.log("FAILED: TIME EXPIRED");
     // Didn't select before the time ran out;
 
     // Lose a life
     play("failure_02", true, 0.7);
     updateLives({ decrement: true });
+    if (lives <= 0) {
+      endGame();
+      return;
+    }
     // Begin the round again
     startRound();
     return;
@@ -104,8 +118,13 @@ function endRound() {
       play("mouth_pop", true, 0.9);
       console.log("CORRECT");
     } else {
+      console.log("FAILED: INCORRECT");
       play("failure_02", true, 0.7);
       updateLives({ decrement: true });
+      if (lives <= 0) {
+        endGame();
+        return;
+      }
     }
   }
 
@@ -184,14 +203,10 @@ function updateLives({ decrement } = { decrement: false }) {
     lives--;
   }
 
-  if (lives <= 0) {
-    updateGameState(GAME_STATES.FINISHED);
-  }
-
   const liveArr = [];
   for (let i = 0; i < STARTING_LIVES; i++) {
     if (i < lives) {
-      liveArr.push("🟩");
+      liveArr.push("❤️");
     } else {
       liveArr.push("❌");
     }
@@ -200,7 +215,6 @@ function updateLives({ decrement } = { decrement: false }) {
 }
 
 function setupGame() {
-
   // Volume
   set_music_volume(0.8);
   set_fx_volume(0.8);
@@ -208,15 +222,41 @@ function setupGame() {
   // We can't play sound until the user interacts.  So as soon as they
   // click anywhere, we'll blast em with our theme song.
   window.theme_started = false;
-  document.body.addEventListener('click', function() {
-    if (!window.theme_started) {
-      theme_song.play();
-      window.theme_started = true;
-    }
-  }, true);
+}
 
+function endGame() {
+  updateGameState(GAME_STATES.FINISHED);
+
+  $modal.querySelector(".modal-header > .big-text").textContent =
+    "Game over, man";
+
+  const modalBody = $modal.querySelector(".modal-body");
+  modalBody.innerHTML = "";
+  modalBody.insertAdjacentHTML(
+    "beforeEnd",
+    /* html */ `
+    <p>You completed ${roundNumber} rounds.</p>
+    <p>Well done?</p>
+  `
+  );
+
+  $modal.querySelector(".modal-footer > button > .text").textContent =
+    "Try again";
+
+  $modal.classList.remove("hide");
+}
+
+function startGame() {
+  if (!window.theme_started) {
+    theme_song.play();
+    window.theme_started = true;
+  }
+
+  //  Start the Game!
+  lives = STARTING_LIVES;
   updateLives();
-  //  Kick if off
+  roundNumber = 0;
+
   updateGameState(GAME_STATES.IN_PROGRESS);
   startRound();
 }
