@@ -4,66 +4,66 @@ var MUSIC_VOLUME = 1.0;
 var FX_VOLUME = 1.0;
 
 var SOUNDS = {
-	"bleep": [
-		[
-			new Audio("sounds/bleep_hi_1.mp3"),
-			new Audio("sounds/bleep_hi_2.mp3"),
-		],
-		[
-			new Audio("sounds/bleep_lo_1.mp3"),
-			new Audio("sounds/bleep_lo_2.mp3"),
-		],
-	],
-	"success": [
-		[
-			new Audio("sounds/success_hi_01.mp3"),
-			new Audio("sounds/success_hi_02.mp3"),
-			new Audio("sounds/success_hi_03.mp3"),
-		],
-		[
-			new Audio("sounds/success_mid_01.mp3"),
-			new Audio("sounds/success_mid_02.mp3"),
-			new Audio("sounds/success_mid_03.mp3"),
-		],
-		[
-			new Audio("sounds/success_low_01.mp3"),
-			new Audio("sounds/success_low_02.mp3"),
-			new Audio("sounds/success_low_03.mp3"),
-		],
-	],
-	"success_single": [
-		[
-			new Audio("sounds/success_single.mp3"),
-		],
-	],
-	"success_stairs_single": [
-		[
-			new Audio("sounds/success_stairs_single.mp3"),
-		],
-	],
-	"beep_bright": [
-		[
-			new Audio("sounds/beep_bright.mp3"),
-		],
-	],
-	"beep_muffled": [
-		[
-			new Audio("sounds/beep_muffled.mp3"),
-		],
-	],
-	"ui_confirm": [
-		[
-			new Audio("sounds/ui_confirm_01.mp3"),
-		],
-	],
-	"star_confirm_hi": [[new Audio("sounds/star_confirm_hi_01.mp3")]],
-	"star_confirm_mid": [
-		[
-			new Audio("sounds/star_confirm_mid_01.mp3"),
-		],
-	],
-	"crisp_click": [[new Audio("sounds/crisp_click.mp3")]],
-	"basic_click": [[new Audio("sounds/basic_click_01.mp3")]],
+	// "bleep": [
+	// 	[
+	// 		new Audio("sounds/bleep_hi_1.mp3"),
+	// 		new Audio("sounds/bleep_hi_2.mp3"),
+	// 	],
+	// 	[
+	// 		new Audio("sounds/bleep_lo_1.mp3"),
+	// 		new Audio("sounds/bleep_lo_2.mp3"),
+	// 	],
+	// ],
+	// "success": [
+	// 	[
+	// 		new Audio("sounds/success_hi_01.mp3"),
+	// 		new Audio("sounds/success_hi_02.mp3"),
+	// 		new Audio("sounds/success_hi_03.mp3"),
+	// 	],
+	// 	[
+	// 		new Audio("sounds/success_mid_01.mp3"),
+	// 		new Audio("sounds/success_mid_02.mp3"),
+	// 		new Audio("sounds/success_mid_03.mp3"),
+	// 	],
+	// 	[
+	// 		new Audio("sounds/success_low_01.mp3"),
+	// 		new Audio("sounds/success_low_02.mp3"),
+	// 		new Audio("sounds/success_low_03.mp3"),
+	// 	],
+	// ],
+	// "success_single": [
+	// 	[
+	// 		new Audio("sounds/success_single.mp3"),
+	// 	],
+	// ],
+	// "success_stairs_single": [
+	// 	[
+	// 		new Audio("sounds/success_stairs_single.mp3"),
+	// 	],
+	// ],
+	// "beep_bright": [
+	// 	[
+	// 		new Audio("sounds/beep_bright.mp3"),
+	// 	],
+	// ],
+	// "beep_muffled": [
+	// 	[
+	// 		new Audio("sounds/beep_muffled.mp3"),
+	// 	],
+	// ],
+	// "ui_confirm": [
+	// 	[
+	// 		new Audio("sounds/ui_confirm_01.mp3"),
+	// 	],
+	// ],
+	// "star_confirm_hi": [[new Audio("sounds/star_confirm_hi_01.mp3")]],
+	// "star_confirm_mid": [
+	// 	[
+	// 		new Audio("sounds/star_confirm_mid_01.mp3"),
+	// 	],
+	// ],
+	// "crisp_click": [[new Audio("sounds/crisp_click.mp3")]],
+	// "basic_click": [[new Audio("sounds/basic_click_01.mp3")]],
 	"basic_click_02": [[new Audio("sounds/basic_click_02.mp3")]],
 	"mouth_pop": [
 		[
