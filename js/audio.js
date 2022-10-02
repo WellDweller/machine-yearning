@@ -60,6 +60,7 @@ var SOUNDS = {
 		],
 	],
 	"crisp_click": [[new Audio("sounds/crisp_click.mp3")]],
+	"basic_click": [[new Audio("sounds/basic_click_01.mp3")]],
 	"mouth_pop": [
 		[
 			new Audio("sounds/mouth_pop_01.mp3"),
@@ -82,6 +83,7 @@ var SOUNDS = {
 			new Audio("sounds/failure.mp3"),
 		],
 	],
+	"riser": [[new Audio("sounds/riser.mp3")]],
 }
 
 export function play(name, vary_pitch, volume) {
@@ -102,6 +104,20 @@ export function play(name, vary_pitch, volume) {
 	}
 }
 
+window.play = play;
+
+export function stop(name) {
+	var layers = SOUNDS[name];
+	for (const layer of layers) {
+		for (const sound of layer) {
+		    sound.pause();
+		    sound.currentTime = 0;
+		}
+	}
+}
+
+window.stop = stop;
+
 export var theme_song = new Audio('sounds/theme draft.mp3');
 theme_song.addEventListener('timeupdate', function(){
     var buffer = .44;
@@ -112,5 +128,3 @@ theme_song.addEventListener('timeupdate', function(){
 });
 
 window.theme_song = theme_song;
-
-window.play = play;
