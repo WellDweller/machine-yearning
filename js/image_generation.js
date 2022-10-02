@@ -13,8 +13,11 @@ const TYPES = {
 
 const $body = document.querySelector("body");
 
+// Size is the potential max size
 export function getRandomImageDataUrl(_size, _type) {
-  const size = clamp(_size, 3, 8) || get_random_int_in_range(3, 8);
+  const size = _size
+    ? get_random_int_in_range(3, Math.min(_size, 8))
+    : get_random_int_in_range(3, 8);
   const type = _type || Math.random() > 0.5 ? TYPES.SYM_HORZ : TYPES.SYM_VERT;
   const $canvas = createImage(size, type);
   return $canvas.toDataURL();

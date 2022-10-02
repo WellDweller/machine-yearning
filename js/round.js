@@ -17,7 +17,7 @@ const ROUNDS = [
     ruleType: "shape",
     rulesToBeConsistent: [],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
@@ -25,21 +25,21 @@ const ROUNDS = [
     // ruleConstraints: {},
     rulesToRandomize: ["shape"],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
     rulesToRandomize: ["shape"],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.NEW_RULE,
     ruleType: "shape",
     rulesToBeConsistent: [],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
@@ -47,37 +47,46 @@ const ROUNDS = [
     // ruleConstraints: {},
     rulesToRandomize: ["shape"],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
     rulesToRandomize: ["shape"],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.NEW_RULE,
     ruleType: "color",
     rulesToBeConsistent: ["shape"],
     numAnswers: 3,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
     rulesToRandomize: ["shape", "color"],
     numAnswers: 4,
-    imageSize: 3,
+    imageSize: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     ruleType: "shape",
     rulesToRandomize: ["shape", "color"],
     numAnswers: 4,
-    imageSize: 3,
+    imageSize: 4,
+  },
+  {
+    roundType: ROUND_TYPES.EXISTING_RULE,
+    ruleType: "shape",
+    rulesToRandomize: ["shape", "color"],
+    numAnswers: 4,
+    imageSize: 4,
   },
 ];
+
+const INITIAL_NUM_ROUNDS = ROUNDS.length;
 
 // Hacky global that we use to store the generated round data that is persistent
 // for the duration of the round
@@ -136,25 +145,15 @@ export function validate_round(roundNum, answerIndex) {
 }
 
 function generateRandomRound(roundNumber) {
-  // Super shitty
-
-  let round = null;
-
-  if (Math.random() > 0.6) {
-    round = {
-      roundType: ROUND_TYPES.NEW_RULE,
-      ruleType: "shape",
-      rulesToBeConsistent: [],
-      numAnswers: get_random_int_in_range(4, 9),
-    };
-  } else {
-    round = {
-      roundType: ROUND_TYPES.EXISTING_RULE,
-      // ruleType: "shape",
-      // ruleConstraints: {},
-      numAnswers: get_random_int_in_range(4, 9),
-    };
-  }
+  const wrappedIndex = roundNumber % INITIAL_NUM_ROUNDS;
+  // How many times we've looped over the initial round structure
+  const loopCount = Math.floor(roundNumber / INITIAL_NUM_ROUNDS);
+  // Get the hard coded round for this index
+  const round = ROUNDS[wrappedIndex];
+  // Increase the complexity a little, but keep the other attributes the same
+  round.imageSize = round.imageSize + loopCount;
+  // Never show more than 9 answers
+  round.numAnswers = Math.min(round.numAnswers + loopCount, 9);
 
   ROUNDS.push(round);
   return round;
