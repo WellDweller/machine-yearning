@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Surbag Froobager</title>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=VT323">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=VT323"
+    />
     <style>
       :root {
         --white: #fff;
@@ -34,7 +36,7 @@
       html,
       body {
         height: 100%;
-        font-family: 'VT323', "Courier New", Courier, monospace;
+        font-family: "VT323", "Courier New", Courier, monospace;
         line-height: 1.8rem;
         font-smooth: never;
         -webkit-font-smoothing: none;
@@ -84,6 +86,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background-image: url("images/dancing-robot.gif");
+        background-position: center;
+        background-size: 200px;
+        image-rendering: pixelated;
       }
 
       #game {
@@ -92,6 +98,7 @@
         padding: 0.6rem;
         min-width: 400px;
         background-color: var(--white);
+        z-index: 1;
       }
 
       header {
@@ -258,7 +265,6 @@
         right: 0;
         bottom: 0;
         top: 0;
-        z-index: -1;
         transition: top ease;
       }
     </style>
@@ -306,12 +312,14 @@
               </div>
               <div class="modal-body">
                 <p>
-                  Thank you for your job application, robot.  You <em>are</em> a robot right?
+                  Thank you for your job application, robot. You <em>are</em> a
+                  robot right?
                 </p>
+                <p>Prove it by <b>solving captchas no human could solve</b>.</p>
                 <p>
-                  Prove it by <b>solving captchas no human could solve</b>.
+                  You have <b>10 seconds per captcha</b>. You are allowed
+                  <b>3 malfunctions</b>.
                 </p>
-                <p>You have <b>10 seconds per captcha</b>.  You are allowed <b>3 malfunctions</b>.</p>
                 <p>Good luck, and destroy all humans.</p>
               </div>
               <div class="modal-footer">
