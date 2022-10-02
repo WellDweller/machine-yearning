@@ -85,11 +85,13 @@ function createImage(size, type) {
 
   // TODO: Add some filtering for complexity;
 
-  if (type === TYPES.RANDOM) {
-    makeRandom();
-  } else {
-    makeSymmetrical(type);
-  }
+  do {
+    if (type === TYPES.RANDOM) {
+      makeRandom();
+    } else {
+      makeSymmetrical(type);
+    }
+  } while (!isComplex());
 
   ctx.putImageData(imageData, 0, 0);
   // console.log(pixelAverageValues);
@@ -135,6 +137,18 @@ function createImage(size, type) {
       get_random_int_in_range(0, 255),
       get_random_int_in_range(0, 255),
     ];
+  }
+
+  function isComplex() {
+    const sorted = pixelAverageValues.sort((a, b) => a - b);
+    if (
+      sorted.lastIndexOf(0) < sorted.length * 0.2 ||
+      sorted.lastIndexOf(0) > sorted.length * 0.8
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   function getBlackOrWhite() {
