@@ -38,11 +38,6 @@ var SOUNDS = {
 			new Audio("sounds/success_stairs_single.mp3"),
 		],
 	],
-	"spaceship_falling": [
-		[
-			new Audio("sounds/spaceship_falling.mp3"),
-		],
-	],
 	"beep_bright": [
 		[
 			new Audio("sounds/beep_bright.mp3"),
@@ -65,6 +60,28 @@ var SOUNDS = {
 		],
 	],
 	"crisp_click": [[new Audio("sounds/crisp_click.mp3")]],
+	"mouth_pop": [
+		[
+			new Audio("sounds/mouth_pop_01.mp3"),
+			new Audio("sounds/mouth_pop_02.mp3"),
+			new Audio("sounds/mouth_pop_03.mp3"),
+			new Audio("sounds/mouth_pop_04.mp3"),
+			new Audio("sounds/mouth_pop_05.mp3"),
+			new Audio("sounds/mouth_pop_06.mp3"),
+			new Audio("sounds/mouth_pop_07.mp3"),
+		],
+	],
+	// Bad stuff
+	"spaceship_falling": [
+		[
+			new Audio("sounds/spaceship_falling.mp3"),
+		],
+	],
+	"failure": [
+		[
+			new Audio("sounds/failure.mp3"),
+		],
+	],
 }
 
 export function play(name, vary_pitch, volume) {
