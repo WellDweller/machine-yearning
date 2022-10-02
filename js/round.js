@@ -155,6 +155,10 @@ function generateRandomRound(roundNumber) {
   // Never show more than 9 answers
   round.numAnswers = Math.min(round.numAnswers + loopCount, 9);
 
+  if ((round.roundType = ROUND_TYPES.EXISTING_RULE)) {
+    round.rulesToRandomize = ["shape", "color"];
+  }
+
   ROUNDS.push(round);
   return round;
 }
