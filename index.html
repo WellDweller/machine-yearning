@@ -91,6 +91,7 @@
         background-position: center;
         background-size: 200px;
         image-rendering: pixelated;
+        overflow: hidden;
       }
 
       #game {
@@ -188,15 +189,16 @@
 
       #time-remaining {
         position: absolute;
-        right: 0;
-        display: none;
+        bottom: -0.5rem;
+        left: 1rem;
         /* padding: 0.8rem; */
       }
 
       #time {
-        color: var(--darkGrey);
+        color: #000;
         user-select: none;
-        font-size: 20rem;
+        font-size: 6rem;
+        line-height: 6rem;
       }
 
       #modal {
@@ -280,7 +282,7 @@
     <div id="game-container">
       <div id="time-bar">
         <div id="time-remaining">
-          <div id="time" class="giant-text">10000</div>
+          <div id="time" class="big-text">10000</div>
         </div>
       </div>
       <div id="game">
