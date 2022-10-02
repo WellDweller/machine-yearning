@@ -188,3 +188,7 @@ function createImage(size, type) {
     return [r, g, b];
   }
 }
+
+// for (let i = 0; i < 1000; i++) {
+//   createSymbol();
+// }
