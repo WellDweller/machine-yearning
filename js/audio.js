@@ -33,6 +33,11 @@ var SOUNDS = {
 			new Audio("sounds/success_single.mp3"),
 		],
 	],
+	"success_stairs_single": [
+		[
+			new Audio("sounds/success_stairs_single.mp3"),
+		],
+	],
 	"spaceship_falling": [
 		[
 			new Audio("sounds/spaceship_falling.mp3"),
@@ -51,6 +56,16 @@ var SOUNDS = {
 	"ui_confirm": [
 		[
 			new Audio("sounds/ui_confirm_01.mp3"),
+		],
+	],
+	"star_confirm_hi": [
+		[
+			new Audio("sounds/star_confirm_hi_01.mp3"),
+		],
+	],
+	"star_confirm_mid": [
+		[
+			new Audio("sounds/star_confirm_mid_01.mp3"),
 		],
 	],
 }
