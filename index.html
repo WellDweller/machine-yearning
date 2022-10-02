@@ -12,6 +12,7 @@
     <style>
       :root {
         --white: #fff;
+        --black: #000;
         --blue: hsl(214, 70%, 56%);
         --darkBlue: hsl(214, 70%, 46%);
         --grey: hsl(0, 0%, 84%);
@@ -52,7 +53,7 @@
       }
 
       button {
-        background-color: var(--blue);
+        background-color: var(--red);
         border: none;
         padding: 0.8rem;
         border-radius: 0.2rem;
@@ -60,7 +61,7 @@
       }
 
       button:hover {
-        background-color: var(--darkBlue);
+        background-color: var(--darkGrey);
       }
 
       button .text {
@@ -94,19 +95,23 @@
 
       #game {
         margin: auto;
-        border: 1px solid var(--grey);
+        border: 1px solid var(--black);
         padding: 0.6rem;
         min-width: 400px;
         background-color: var(--white);
         z-index: 1;
+        border-width: 5px;
       }
 
       header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: var(--blue);
-        color: var(--white);
+        background-color: var(--white);
+        color: var(--black);
+        border-color: var(--black);
+        border-width: 5px;
+        border-style: dashed;
         padding: 1.2rem;
       }
 
@@ -122,20 +127,19 @@
         display: grid;
         /* We'll need to update this value in response to the number of items */
         grid-template-columns: 1fr 1fr;
-        gap: 0.6rem;
+        gap: 0.7rem;
         width: 100%;
       }
       .slot {
         width: 100%;
         aspect-ratio: 1;
-        outline: 1px solid var(--grey);
         user-select: none;
         position: relative;
       }
 
       .slot.selected {
         /* border: 1px solid var(--darkBlue); */
-        outline: 6px solid var(--darkBlue);
+        outline: 6px solid var(--red);
       }
 
       .slot:hover {
@@ -163,7 +167,7 @@
       }
 
       footer {
-        border-top: 1px solid var(--grey);
+        border-top: 5px solid var(--black);
         margin: 0 -0.6rem -0.6rem -0.6rem;
         padding: 0.6rem;
         display: flex;
@@ -178,7 +182,8 @@
       }
 
       #round-count {
-        color: var(--darkGrey);
+        color: var(--black);
+        font-size: 1.8em;
       }
 
       #time-remaining {
