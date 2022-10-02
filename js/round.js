@@ -17,6 +17,7 @@ const ROUNDS = [
     ruleType: "shape",
     rulesToBeConsistent: [],
     numAnswers: 3,
+    imageSize: 3,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
@@ -24,30 +25,57 @@ const ROUNDS = [
     // ruleConstraints: {},
     rulesToRandomize: ["shape"],
     numAnswers: 3,
+    imageSize: 3,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
     rulesToRandomize: ["shape"],
     numAnswers: 3,
+    imageSize: 3,
+  },
+  {
+    roundType: ROUND_TYPES.NEW_RULE,
+    ruleType: "shape",
+    rulesToBeConsistent: [],
+    numAnswers: 3,
+    imageSize: 3,
+  },
+  {
+    roundType: ROUND_TYPES.EXISTING_RULE,
+    // ruleType: "shape",
+    // ruleConstraints: {},
+    rulesToRandomize: ["shape"],
+    numAnswers: 3,
+    imageSize: 3,
+  },
+  {
+    roundType: ROUND_TYPES.EXISTING_RULE,
+    // ruleType: "shape",
+    rulesToRandomize: ["shape"],
+    numAnswers: 3,
+    imageSize: 3,
   },
   {
     roundType: ROUND_TYPES.NEW_RULE,
     ruleType: "color",
     rulesToBeConsistent: ["shape"],
     numAnswers: 3,
+    imageSize: 3,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
     rulesToRandomize: ["shape", "color"],
     numAnswers: 4,
+    imageSize: 3,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     ruleType: "shape",
     rulesToRandomize: ["shape", "color"],
     numAnswers: 4,
+    imageSize: 3,
   },
 ];
 
@@ -62,14 +90,16 @@ export function get_round_data(roundNum) {
     currentRoundData = get_new_rule_round(
       round.rulesToBeConsistent,
       round.ruleType,
-      round.numAnswers
+      round.numAnswers,
+      round.imageSize
     );
     console.log({ round, currentRoundData });
     return currentRoundData;
   } else {
     currentRoundData = get_existing_rule_round(
       round.numAnswers,
-      round.rulesToRandomize
+      round.rulesToRandomize,
+      round.imageSize
     );
     console.log({ round, currentRoundData });
     return currentRoundData;

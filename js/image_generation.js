@@ -1,4 +1,4 @@
-import { get_random_int_in_range } from "./utils.js";
+import { get_random_int_in_range, clamp } from "./utils.js";
 
 // add metadata
 // add ability to download
@@ -14,7 +14,7 @@ const TYPES = {
 const $body = document.querySelector("body");
 
 export function getRandomImageDataUrl(_size, _type) {
-  const size = _size || get_random_int_in_range(3, 8);
+  const size = clamp(_size, 3, 8) || get_random_int_in_range(3, 8);
   const type = _type || Math.random() > 0.5 ? TYPES.SYM_HORZ : TYPES.SYM_VERT;
   const $canvas = createImage(size, type);
   return $canvas.toDataURL();

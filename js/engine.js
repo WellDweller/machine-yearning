@@ -107,12 +107,15 @@ function get_prompt(rule_constraints, new_rule_word) {
 //
 //
 
-// Probably want a way to control which rules should be varied.  And get back what actual rules
-// each image fits.
-//
-// Also need a way to specify an *existing* image for modification (e.g. a blue "florbon").
-function get_random_image() {
-  return getRandomImageDataUrl();
+// If size is undefined, it will be random
+function get_random_image(size) {
+  let randomImage;
+  // Make sure the Images we return are random
+  do {
+    randomImage = getRandomImageDataUrl(size);
+  } while (Object.values(RULES["shape"]).includes(randomImage));
+
+  return randomImage;
 }
 
 // Gets all rules that haven't been defined for a particular rule type
@@ -132,7 +135,7 @@ function get_undefined_rules(rule_type) {
 //
 // The rule constraints are *not* in terms of the fake language.  They're real words
 // (e.g. {shape: "data://osidj", color: "blue"});
-function get_n_answers(n, rule_constraints, new_rule_type) {
+function get_n_answers(n, rule_constraints, new_rule_type, image_size) {
   var answers = [];
 
   // Set up a pool of rule values that satisfy the new rule type for us to choose from.
@@ -147,7 +150,7 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
     if ("shape" in rule_constraints) {
       answer.shape = rule_constraints.shape;
     } else {
-      answer.shape = get_random_image();
+      answer.shape = get_random_image(image_size);
     }
 
     // Color
@@ -195,7 +198,8 @@ function get_random_word() {
 export function get_new_rule_round(
   rules_to_be_consistent,
   new_rule_type,
-  num_images
+  num_images,
+  image_size
 ) {
   const rule_constraints = {};
 
@@ -205,7 +209,12 @@ export function get_new_rule_round(
   }
 
   var word_we_are_defining = get_random_word();
-  var answers = get_n_answers(num_images, rule_constraints, new_rule_type);
+  var answers = get_n_answers(
+    num_images,
+    rule_constraints,
+    new_rule_type,
+    image_size
+  );
   var prompt = get_prompt(rule_constraints, word_we_are_defining);
   return {
     word_we_are_defining: word_we_are_defining,
@@ -249,7 +258,7 @@ function get_defined_answer() {
 
 // If no rules to randomize are passed, they all will be.  It doesn't make any
 // sense to do none of them.
-function get_n_random_answers(n, rules_to_randomize) {
+function get_n_random_answers(n, rules_to_randomize, image_size) {
   var answers = [];
   rules_to_randomize = new Set(rules_to_randomize);
   for (var i = 0; i < n; i++) {
@@ -257,7 +266,7 @@ function get_n_random_answers(n, rules_to_randomize) {
 
     // Shape
     if (rules_to_randomize.has("shape") || rules_to_randomize.size == 0) {
-      answer.shape = get_random_image();
+      answer.shape = get_random_image(image_size);
     }
 
     // Color
@@ -270,19 +279,23 @@ function get_n_random_answers(n, rules_to_randomize) {
   return answers;
 }
 
-function get_random_answer(rules_to_randomize) {
-  const [answer] = get_n_random_answers(1, rules_to_randomize);
+function get_random_answer(rules_to_randomize, image_size) {
+  const [answer] = get_n_random_answers(1, rules_to_randomize, image_size);
   return answer;
 }
 
-export function get_existing_rule_round(total_answers, rules_to_randomize) {
+export function get_existing_rule_round(
+  total_answers,
+  rules_to_randomize,
+  image_size
+) {
   var answers = [];
 
   const correctAnswer = get_defined_answer();
   answers.push(correctAnswer);
 
   for (var i = 0; i < total_answers - 1; i++) {
-    answers.push(get_random_answer(rules_to_randomize));
+    answers.push(get_random_answer(rules_to_randomize, image_size));
   }
 
   // We don't want the winning answer to always be at the beginning!
