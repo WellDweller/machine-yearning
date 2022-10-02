@@ -1,3 +1,5 @@
+import { getRandomImageDataUrl } from "./image_generation.js";
+import { get_round_data, validate_round } from "./round.js";
 import { get_random_int_in_range } from "./utils.js";
 
 /*
@@ -11,11 +13,13 @@ import { get_random_int_in_range } from "./utils.js";
 
 const ROUND_DURATION_MS = 10 * 1000;
 let roundNumber = 0;
+let selectedIndex = null;
 let timerId = null;
 
 const $time = document.getElementById("time");
 const $slots = document.getElementById("slots");
 const $submitButton = document.getElementById("submit");
+const $commandWords = document.getElementById("command-words");
 
 $submitButton.addEventListener("click", (e) => {
   console.log("Do something on submit");
@@ -24,8 +28,17 @@ $submitButton.addEventListener("click", (e) => {
 
 $slots.addEventListener("click", (e) => {
   if (e.target.dataset.type === "image") {
-    // TODO: need to track selection somewhere, or pull on submit
-    e.target.parentElement.classList.toggle("selected");
+    selectedIndex = e.target.dataset.id;
+
+    console.log({ selectedIndex });
+
+    $slots.querySelectorAll(".slot").forEach((slot) => {
+      if (slot === e.target.parentElement) {
+        slot.classList.toggle("selected");
+      } else {
+        slot.classList.remove("selected");
+      }
+    });
   }
 });
 
@@ -49,16 +62,29 @@ function stopTimer() {
 }
 
 function startRound() {
-  roundNumber += 1;
   console.log("Starting round", roundNumber);
+  const round = get_round_data(roundNumber);
+  const { answers, prompt } = round;
 
-  setupSlots(get_random_int_in_range(3, 9));
+  selectedIndex = null;
+  $commandWords.textContent = prompt;
+  setupSlots(answers);
 
   // startTimer();
 }
 
 function endRound() {
   stopTimer();
+
+  if (selectedIndex === null) {
+    // Didn't select before the time ran out
+  } else {
+    const result = validate_round(roundNumber, selectedIndex);
+    console.log(result);
+  }
+
+  roundNumber++;
+
   startRound();
 }
 
@@ -67,10 +93,25 @@ function getRandomImageSrc() {
   return `images/${n.toString().padStart(2, 0)}.png`;
 }
 
-function setupSlots(numSlots) {
+function setupSlots(answers) {
+  clearSlots();
+  for (let i = 0; i < answers.length; i++) {
+    const src = answers[i].shape;
+    console.log(src);
+    const $slot = createSlotElement(src, i);
+    $slots.appendChild($slot);
+  }
+
+  //   TODO: feels janky
+  const numCols = answers.length === 4 ? 2 : 3;
+
+  $slots.style.gridTemplateColumns = "1fr ".repeat(numCols);
+}
+
+function setupRandomSlots(numSlots) {
   clearSlots();
   for (let i = 0; i < numSlots; i++) {
-    const src = getRandomImageSrc();
+    const src = getRandomImageDataUrl();
     const $slot = createSlotElement(src, i);
     $slots.appendChild($slot);
   }

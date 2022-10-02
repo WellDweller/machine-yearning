@@ -13,6 +13,13 @@ const TYPES = {
 
 const $body = document.querySelector("body");
 
+export function getRandomImageDataUrl(_size, _type) {
+  const size = _size || get_random_int_in_range(3, 8);
+  const type = _type || Math.random() > 0.5 ? TYPES.SYM_HORZ : TYPES.SYM_VERT;
+  const $canvas = createImage(size, type);
+  return $canvas.toDataURL();
+}
+
 function createSymbol() {
   const size = get_random_int_in_range(3, 10);
 
@@ -31,7 +38,7 @@ function createSymbol() {
     type,
   };
 
-  const $canvas = createCanvas(size, type);
+  const $canvas = createImage(size, type);
   const $symbolInfo = document.createElement("div");
   $symbolInfo.classList.add("symbol-info");
   $symbolInfo.appendChild($canvas);
@@ -57,7 +64,7 @@ function createSymbol() {
   $body.appendChild($symbolInfo);
 }
 
-function createCanvas(size, type) {
+function createImage(size, type) {
   const width = size;
   // assume they will always been square
   const height = width;
@@ -71,6 +78,13 @@ function createCanvas(size, type) {
   const imageData = ctx.getImageData(0, 0, width, height);
   const data = imageData.data;
 
+  // Array equal to number of pixels in image, with average rgb values (should
+  // be 0 or 255 while we're just black and white) Used for quick checks on
+  // complexity.
+  const pixelAverageValues = new Array(width * height);
+
+  // TODO: Add some filtering for complexity;
+
   if (type === TYPES.RANDOM) {
     makeRandom();
   } else {
@@ -78,7 +92,7 @@ function createCanvas(size, type) {
   }
 
   ctx.putImageData(imageData, 0, 0);
-
+  // console.log(pixelAverageValues);
   return $canvas;
 
   function makeRandom() {
@@ -145,6 +159,8 @@ function createCanvas(size, type) {
     data[_b] = b;
     // Always full opaque (default is 0)
     data[_a] = 255;
+
+    pixelAverageValues[y * width + x] = [r, g, b].reduce((a, b) => a + b) / 3;
   }
 
   function getPixelColor(x, y) {
@@ -154,8 +170,4 @@ function createCanvas(size, type) {
     const b = data[index + 2];
     return [r, g, b];
   }
-}
-
-for (let i = 0; i < 1000; i++) {
-  createSymbol();
 }

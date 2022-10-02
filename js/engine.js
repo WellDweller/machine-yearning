@@ -18,33 +18,31 @@ RULES example:
 }
 */
 
-import * as audio from './audio.js';
-import * as utils from './utils.js';
+import * as audio from "./audio.js";
+import * as utils from "./utils.js";
+import { getRandomImageDataUrl } from "./image_generation.js";
 
 var p = console.log;
 
 var POTENTIAL_RULES = {
-  color: [
-    "red", "blue", "green", "orange", "pink", "purple", "yellow"
-  ],
-  rotation: [
-    "upright", "right", "upside_down", "left"
-  ],
-  size: [
-    "small", "medium", "large"
-  ]
-}
+  color: ["red", "blue", "green", "orange", "pink", "purple", "yellow"],
+  rotation: ["upright", "right", "upside_down", "left"],
+  size: ["small", "medium", "large"],
+};
 
 window.RULES = {
   shape: {},
   color: {},
   rotation: {},
   size: {},
-}
+};
 
-function define_rule(rule_type, name, value) {
+export function define_rule(rule_type, name, value) {
   console.assert(rule_type in RULES, `Unknown rule ${rule_type}`);
-  console.assert(!(name in RULES[rule_type]), `${rule_type} rule ${name} already exists`);
+  console.assert(
+    !(name in RULES[rule_type]),
+    `${rule_type} rule ${name} already exists`
+  );
   RULES[rule_type][name] = value;
 }
 
@@ -73,8 +71,8 @@ function transform_image(image, rule_type, rule_value) {
   return image;
 }
 
-window.get_prompt = function(rule_constraints, new_rule_word) {
-  var words = []
+function get_prompt(rule_constraints, new_rule_word) {
+  var words = [];
   for (const rule_type in rule_constraints) {
     // Shape should always come last, because english.
     if (rule_type == "shape") {
@@ -88,7 +86,7 @@ window.get_prompt = function(rule_constraints, new_rule_word) {
   if ("shape" in rule_constraints) {
     words.push(get_fake_word_for_rule("shape", rule_constraints.shape));
   }
-  return words.join(' ');
+  return words.join(" ");
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -102,12 +100,7 @@ window.get_prompt = function(rule_constraints, new_rule_word) {
 //
 // Also need a way to specify an *existing* image for modification (e.g. a blue "florbon").
 function get_random_image() {
-  var result = 'data://';
-  var characters  = 'abcdefghijklmnopqrstuvwxyz';
-  for (var i = 0; i < 12; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
+  return getRandomImageDataUrl();
 }
 
 // Gets all rules that haven't been defined for a particular rule type
@@ -170,12 +163,12 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
 }
 
 function get_random_word() {
-  var consonants = 'bcdfghjklmnpqrstvwxz';
-  var vowels = 'aeiou';
+  var consonants = "bcdfghjklmnpqrstvwxz";
+  var vowels = "aeiou";
   var min = 3;
   var max = 7;
   var length = Math.random() * (max - min) + min;
-  var word = '';
+  var word = "";
   var pick_from_consonants = true;
   for (var i = 0; i < length; i++) {
     if (pick_from_consonants) {
@@ -192,15 +185,19 @@ function get_random_word() {
 // All answers must fit these rules.)
 //
 // new_rule_type -- the rule we're having the user choose(e.g. "size").
-window.get_new_rule_round = function (rule_constraints, new_rule_type, num_images) {
+export function get_new_rule_round(
+  rule_constraints,
+  new_rule_type,
+  num_images
+) {
   var word = get_random_word();
-  var answers = get_n_answers(3, rule_constraints, new_rule_type);
+  var answers = get_n_answers(num_images, rule_constraints, new_rule_type);
   var prompt = get_prompt(rule_constraints, word);
   return {
     word: word,
     prompt: prompt,
     answers: answers,
-  }
+  };
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -213,7 +210,10 @@ function transform_answer(rule_constraints) {
   // Color
   if ("color" in rule_constraints) {
     rule_constraints.shape = transform_image(
-      rule_constraints.shape, "color", rule_constraints.color);
+      rule_constraints.shape,
+      "color",
+      rule_constraints.color
+    );
   }
   return rule_constraints.shape;
 }
@@ -230,12 +230,11 @@ function get_random_fully_transformed_answer() {
   var prompt = get_prompt(rule_constraints);
   return {
     name: prompt,
-    shape: transform_answer(rule_constraints)
+    shape: transform_answer(rule_constraints),
   };
 }
 
-window.get_existing_rule_round = function(total_answers) {
-
+export function get_existing_rule_round(total_answers) {
   var answers = [];
   for (var i = 0; i < total_answers; i++) {
     answers.push(get_random_fully_transformed_answer());
@@ -245,11 +244,11 @@ window.get_existing_rule_round = function(total_answers) {
   var correct_answer = answers[0];
   answers = utils.shuffle(answers);
 
-
   return {
     answers: answers,
-    correct_answer: correct_answer
-  }
+    correct_answer: correct_answer,
+    prompt: correct_answer.name,
+  };
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -259,39 +258,44 @@ window.get_existing_rule_round = function(total_answers) {
 //
 
 // Round 1 (new rule)
-var rule_constraints = {};
-var rule_type = "shape";
-var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
-console.log(">>> Define the " + new_rule_round.prompt);
-var answer = new_rule_round.answers[0];
-console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.shape}`);
-define_rule(rule_type, new_rule_round.word, answer.shape);
+// var rule_constraints = {};
+// var rule_type = "shape";
+// var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
+// console.log({ new_rule_round });
+// console.log(">>> Define the " + new_rule_round.prompt);
+// var answer = new_rule_round.answers[0];
+// console.log(
+//   `Defining word ${new_rule_round.word} as ${rule_type} ${answer.shape}`
+// );
+// define_rule(rule_type, new_rule_round.word, answer.shape);
 
-// Round 2 (existing rules)
-var existing_rule_round = get_existing_rule_round(3);
-console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
+// // Round 2 (existing rules)
+// var existing_rule_round = get_existing_rule_round(3);
+// console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
-// Round 3 (new rule)
-var rule_constraints = {shape: answer.shape};
-var rule_type = "color";
-var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
-console.log(">>> Define the " + new_rule_round.prompt);
-var answer = new_rule_round.answers[0];
-console.log(`Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`);
-define_rule(rule_type, new_rule_round.word, answer.color);
+// // Round 3 (new rule)
+// var rule_constraints = { shape: answer.shape };
+// var rule_type = "color";
+// var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
+// console.log(">>> Define the " + new_rule_round.prompt);
+// var answer = new_rule_round.answers[0];
+// console.log(
+//   `Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`
+// );
+// define_rule(rule_type, new_rule_round.word, answer.color);
 
-// Round 4 (existing rules)
-var existing_rule_round = get_existing_rule_round(3);
-console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
+// // Round 4 (existing rules)
+// var existing_rule_round = get_existing_rule_round(3);
+// console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
 
-// Miscellaneous testing.
-p(" ");
-p(" ");
-p(" ");
-define_rule("shape", "frobus", "data://frobus.jpg");
-define_rule("shape", "blenny", "data://blenny.jpg");
-console.log(get_fake_word_for_rule("shape", "data://frobus.jpg"));
-define_rule("color", "bleen", "blue");
-console.log(get_undefined_rules("color"));
-console.log(get_n_answers(3, {}));
-console.log(get_n_answers(3, {shape: "data://frobus.jpg"}, "color"));
+// // Miscellaneous testing.
+// p(" ");
+// p(" ");
+// p(" ");
+// define_rule("shape", "frobus", "data://frobus.jpg");
+// define_rule("shape", "blenny", "data://blenny.jpg");
+// console.log(get_fake_word_for_rule("shape", "data://frobus.jpg"));
+// define_rule("color", "bleen", "blue");
+// console.log(get_undefined_rules("color"));
+// console.log(get_n_answers(3, {}));
+// console.log(get_n_answers(3, { shape: "data://frobus.jpg" }, "color"));
