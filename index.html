@@ -15,6 +15,12 @@
         --lightGrey: hsl(0, 0%, 94%);
         --darkGrey: hsl(0, 0%, 64%);
         --green: hsl(115, 29%, 53%);
+
+        --red: hsl(0, 63%, 52%);
+        --orange: hsl(26, 77%, 47%);
+        --pink: hsl(306, 53%, 50%);
+        --purple: hsl(256, 74%, 40%);
+        --yellow: hsl(59, 93%, 48%);
       }
       * {
         padding: 0;
@@ -106,6 +112,7 @@
         aspect-ratio: 1;
         border: 1px solid var(--grey);
         user-select: none;
+        position: relative;
       }
 
       .slot.selected {
@@ -125,6 +132,14 @@
         -moz-user-drag: none;
         -o-user-drag: none;
         user-drag: none;
+      }
+
+      .slot .overlay {
+        background-color: #000;
+        mix-blend-mode: lighten;
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
       }
 
       footer {

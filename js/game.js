@@ -81,7 +81,7 @@ function startRound() {
   $prompt.textContent = prompt;
   setupSlots(answers);
 
-  startTimer();
+  // startTimer();
 }
 
 function endRound() {
@@ -118,8 +118,9 @@ function setupSlots(answers) {
   clearSlots();
   for (let i = 0; i < answers.length; i++) {
     const src = answers[i].shape;
+    const color = answers[i].color;
     // console.log(src);
-    const $slot = createSlotElement(src, i);
+    const $slot = createSlotElement(src, i, color);
     $slots.appendChild($slot);
   }
 
@@ -149,16 +150,23 @@ function clearSlots() {
   }
 }
 
-function createSlotElement(src, index) {
+function createSlotElement(src, index, color) {
   const $slot = document.createElement("div");
   $slot.insertAdjacentHTML(
     "beforeEnd",
     /*html*/ `
         <div class="slot">
             <img src="${src}" data-id="${index}" data-type="image" />
+            <div class="overlay"></div>
         </div>
     `
   );
+
+  if (color) {
+    const $overlay = $slot.querySelector(".overlay");
+    $overlay.style.backgroundColor = `var(--${color})`;
+  }
+
   return $slot;
 }
 

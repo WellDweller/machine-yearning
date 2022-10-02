@@ -32,7 +32,7 @@ const ROUNDS = [
   },
   {
     roundType: ROUND_TYPES.NEW_RULE,
-    ruleType: "shape",
+    ruleType: "color",
     ruleConstraints: {},
     numAnswers: 3,
   },
