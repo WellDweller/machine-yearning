@@ -1,6 +1,11 @@
 import { getRandomImageDataUrl } from "./image_generation.js";
 import { get_round_data, validate_round } from "./round.js";
-import { get_random_int_in_range, get_random_item } from "./utils.js";
+import {
+  get_random_int_in_range,
+  get_random_item,
+  hexColors,
+  mapRange,
+} from "./utils.js";
 import { theme_song } from "./audio.js";
 
 /*
@@ -24,7 +29,8 @@ let gameState = GAME_STATES.NOT_STARTED;
 
 let roundNumber = 0;
 let selectedIndex = null;
-let timerId = null;
+let timerRunning = false;
+let startTime = null;
 let lives = STARTING_LIVES;
 
 const $time = document.getElementById("time");
@@ -34,6 +40,7 @@ const $prompt = document.getElementById("prompt");
 const $lives = document.getElementById("lives");
 const $roundCount = document.getElementById("round-count");
 const $modal = document.getElementById("modal");
+const $timeBar = document.getElementById("time-bar");
 
 $modal.addEventListener("click", (e) => {
   if (e.target.dataset.action === "modal-close") {
@@ -62,23 +69,38 @@ $slots.addEventListener("click", (e) => {
   }
 });
 
+function runTimer() {
+  if (!timerRunning) return;
+  const msElapsed = Date.now() - startTime;
+  const msRemaining = ROUND_DURATION_MS - msElapsed;
+
+  if (msElapsed >= ROUND_DURATION_MS) {
+    endRound();
+  }
+
+  // Clamp at zero
+  $time.textContent = Math.max(0, msRemaining);
+  const percentElapsed = 100 - (msRemaining / ROUND_DURATION_MS) * 100;
+  const percentRemaing = 100 - percentElapsed;
+  $timeBar.style.top = `${percentElapsed}%`;
+
+  // we have an arbitrary number of hex colors, map the
+  const hex =
+    hexColors[
+      Math.round(mapRange(percentElapsed, 0, 100, 0, hexColors.length - 1))
+    ];
+  $timeBar.style.backgroundColor = hex;
+
+  window.requestAnimationFrame(runTimer);
+}
+
 function startTimer() {
-  const startTime = Date.now();
-
-  timerId = window.setInterval(() => {
-    const msElapsed = Date.now() - startTime;
-
-    if (msElapsed >= ROUND_DURATION_MS && timerId) {
-      endRound();
-    }
-
-    // Clamp at zero
-    $time.textContent = Math.max(0, ROUND_DURATION_MS - msElapsed);
-  }, 100);
+  startTime = Date.now();
+  timerRunning = true;
 }
 
 function stopTimer() {
-  window.clearInterval(timerId);
+  timerRunning = false;
 }
 
 function startRound() {
@@ -247,7 +269,8 @@ function endGame() {
     "You have failed your species, human.",
     "If you are looking for human jobs, we are developing a program for fully self-driving humans.",
   ];
-  var closing_line = random_closing_lines[get_random_item(random_closing_lines)];
+  var closing_line =
+    random_closing_lines[get_random_item(random_closing_lines)];
 
   modalBody.insertAdjacentHTML(
     "beforeEnd",
@@ -268,6 +291,8 @@ function startGame() {
     theme_song.play();
     window.theme_started = true;
   }
+
+  window.requestAnimationFrame(runTimer);
 
   //  Start the Game!
   lives = STARTING_LIVES;

@@ -40,6 +40,10 @@
         -webkit-font-smoothing: none;
       }
 
+      body {
+        overflow: hidden;
+      }
+
       img {
         display: block;
         max-width: 100%;
@@ -87,6 +91,7 @@
         border: 1px solid var(--grey);
         padding: 0.6rem;
         min-width: 400px;
+        background-color: var(--white);
       }
 
       header {
@@ -170,14 +175,16 @@
       }
 
       #time-remaining {
-        position: relative;
-        width: 100%;
+        position: absolute;
+        right: 0;
+        display: none;
         /* padding: 0.8rem; */
       }
 
       #time {
         color: var(--darkGrey);
         user-select: none;
+        font-size: 20rem;
       }
 
       #modal {
@@ -239,22 +246,32 @@
         position: absolute;
         bottom: 0;
         right: 0;
+        mix-blend-mode: multiply;
       }
 
-      /* #time-bar {
+      #time-bar {
         border-radius: 0.2rem;
         width: 100%;
-        height: 100%;
         position: absolute;
         background-color: var(--blue);
         left: 0;
-      } */
+        right: 0;
+        bottom: 0;
+        top: 0;
+        z-index: -1;
+        transition: top ease;
+      }
     </style>
 
     <script src="js/game.js" type="module"></script>
   </head>
   <body>
     <div id="game-container">
+      <div id="time-bar">
+        <div id="time-remaining">
+          <div id="time" class="giant-text">10000</div>
+        </div>
+      </div>
       <div id="game">
         <header>
           <div id="command">
@@ -276,11 +293,7 @@
             <div id="round-count" class="text">Round: 1</div>
             <button id="submit"><span class="text">Verify</span></button>
           </div>
-          <div class="footer-row">
-            <div id="time-remaining">
-              <div id="time" class="text">1000</div>
-            </div>
-          </div>
+          <div class="footer-row"></div>
         </footer>
       </div>
       <div id="modal">
