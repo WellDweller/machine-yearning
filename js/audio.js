@@ -58,16 +58,13 @@ var SOUNDS = {
 			new Audio("sounds/ui_confirm_01.mp3"),
 		],
 	],
-	"star_confirm_hi": [
-		[
-			new Audio("sounds/star_confirm_hi_01.mp3"),
-		],
-	],
+	"star_confirm_hi": [[new Audio("sounds/star_confirm_hi_01.mp3")]],
 	"star_confirm_mid": [
 		[
 			new Audio("sounds/star_confirm_mid_01.mp3"),
 		],
 	],
+	"crisp_click": [[new Audio("sounds/crisp_click.mp3")]],
 }
 
 export function play(name, vary_pitch, volume) {
