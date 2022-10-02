@@ -83,6 +83,7 @@ var SOUNDS = {
 			new Audio("sounds/failure.mp3"),
 		],
 	],
+	"failure_02": [[new Audio("sounds/failure_02.mp3")]],
 	"riser": [[new Audio("sounds/riser.mp3")]],
 }
 
