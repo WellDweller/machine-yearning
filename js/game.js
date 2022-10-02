@@ -228,6 +228,7 @@ function setupGame() {
 
 function endGame() {
   updateGameState(GAME_STATES.FINISHED);
+  play("spaceship_falling", false, 0.5);
 
   $modal.querySelector(".modal-header > .big-text").textContent =
     "Game over, human";
