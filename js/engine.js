@@ -63,6 +63,11 @@ function get_fake_word_for_rule(rule_type, value) {
   console.log(`Could not find value ${value} for rule type ${rule_type}`);
 }
 
+// Return a rule's random value (i.e. real word, i.e. "blue")
+function get_random_potential_rule(rule_type) {
+  return POTENTIAL_RULES[rule_type][utils.get_random_key(POTENTIAL_RULES[rule_type])];
+}
+
 function transform_image(image, rule_type, rule_value) {
   // TODO: Make it actually blue.
   if (rule_type == "color") {
@@ -228,19 +233,42 @@ function get_defined_answer() {
   return answer;
 }
 
-function get_random_answer(rule_constraints = {}) {
-  const [answer] = get_n_answers(1, rule_constraints);
+// If no rules to randomize are passed, they all will be.  It doesn't make any
+// sense to do none of them.
+function get_n_random_answers(n, rules_to_randomize) {
+  var answers = [];
+  rules_to_randomize = new Set(rules_to_randomize);
+  for (var i = 0; i < n; i++) {
+    var answer = {};
+
+    // Shape
+    if (rules_to_randomize.has("shape") || rules_to_randomize.size == 0) {
+      answer.shape = get_random_image();
+    }
+
+    // Color
+    if (rules_to_randomize.has("color") || rules_to_randomize.size == 0) {
+      answer.color = get_random_potential_rule("color");
+    }
+
+    answers.push(answer);
+  }
+  return answers;
+}
+
+function get_random_answer(rules_to_randomize) {
+  const [answer] = get_n_random_answers(1, rules_to_randomize);
   return answer;
 }
 
-export function get_existing_rule_round(total_answers) {
+export function get_existing_rule_round(total_answers, rules_to_randomize) {
   var answers = [];
 
   const correctAnswer = get_defined_answer();
   answers.push(correctAnswer);
 
   for (var i = 0; i < total_answers - 1; i++) {
-    answers.push(get_random_answer());
+    answers.push(get_random_answer(rules_to_randomize));
   }
 
   // We don't want the winning answer to always be at the beginning!

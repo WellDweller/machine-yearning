@@ -22,12 +22,13 @@ const ROUNDS = [
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
     // ruleConstraints: {},
+    rulesToRandomize: ["shape"],
     numAnswers: 3,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
-    // ruleConstraints: {},
+    rulesToRandomize: ["shape"],
     numAnswers: 3,
   },
   {
@@ -39,13 +40,13 @@ const ROUNDS = [
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     // ruleType: "shape",
-    // ruleConstraints: {},
+    rulesToRandomize: ["shape", "color"],
     numAnswers: 4,
   },
   {
     roundType: ROUND_TYPES.EXISTING_RULE,
     ruleType: "shape",
-    ruleConstraints: {},
+    rulesToRandomize: ["shape", "color"],
     numAnswers: 4,
   },
 ];
@@ -66,7 +67,7 @@ export function get_round_data(roundNum) {
     console.log({ currentRoundData });
     return currentRoundData;
   } else {
-    currentRoundData = get_existing_rule_round(round.numAnswers);
+    currentRoundData = get_existing_rule_round(round.numAnswers, round.rulesToRandomize);
     console.log({ currentRoundData });
     return currentRoundData;
   }
