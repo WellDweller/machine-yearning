@@ -163,6 +163,11 @@ function get_n_answers(n, rule_constraints, new_rule_type, image_size) {
     // Shapes are different.
     if (new_rule_type != "shape") {
       var rule_value = utils.get_random_item(undefined_rules);
+
+      // There aren't any more rules left, continue
+      if (rule_value === undefined) {
+        continue;
+      }
       undefined_rules.delete(rule_value);
       answer[new_rule_type] = rule_value;
     }

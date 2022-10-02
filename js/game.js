@@ -107,15 +107,25 @@ function startRound() {
   console.log("Starting round", roundNumber);
   $roundCount.textContent = `Round: ${roundNumber + 1}`;
 
-  const round = get_round_data(roundNumber);
-  const { answers, prompt } = round;
+  while (true) {
+    const round = get_round_data(roundNumber);
+    const { answers, prompt } = round;
 
-  selectedIndex = null;
-  $prompt.textContent = prompt;
-  setupSlots(answers);
+    // If we weren't able to generate any answers for this round, continue until
+    // we can.
+    if (answers.length < 1) {
+      roundNumber++;
+      continue;
+    }
 
-  startTimer();
-  play("riser", false, 0.6);
+    selectedIndex = null;
+    $prompt.textContent = prompt;
+    setupSlots(answers);
+
+    startTimer();
+    play("riser", false, 0.6);
+    break;
+  }
 }
 
 function endRound() {
