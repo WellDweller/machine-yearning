@@ -213,7 +213,9 @@ function transform_answer(rule_constraints) {
   return rule_constraints.shape;
 }
 
-function get_random_answer() {
+// Fetch an answer with an existing rule definition, i.e. the player has enough
+// information to correctly answer
+function get_defined_answer() {
   var answer = {};
   for (const key in RULES) {
     if (Object.keys(RULES[key]).length == 0) {
@@ -226,20 +228,28 @@ function get_random_answer() {
   return answer;
 }
 
+function get_random_answer(rule_constraints = {}) {
+  const [answer] = get_n_answers(1, rule_constraints);
+  return answer;
+}
+
 export function get_existing_rule_round(total_answers) {
   var answers = [];
-  for (var i = 0; i < total_answers; i++) {
+
+  const correctAnswer = get_defined_answer();
+  answers.push(correctAnswer);
+
+  for (var i = 0; i < total_answers - 1; i++) {
     answers.push(get_random_answer());
   }
 
   // We don't want the winning answer to always be at the beginning!
-  var correct_answer = answers[0];
   answers = utils.shuffle(answers);
 
   return {
     answers: answers,
-    correct_answer: correct_answer,
-    prompt: correct_answer.name,
+    correct_answer: correctAnswer,
+    prompt: correctAnswer.name,
   };
 }
 
