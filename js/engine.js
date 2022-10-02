@@ -138,23 +138,18 @@ function get_n_answers(n, rule_constraints, new_rule_type) {
       answer.shape = get_random_image();
     }
 
-    // Rule constraint transformations
-    //
     // Color
     if ("color" in rule_constraints) {
       answer.color = rule_constraints.color;
-      answer.shape = transform_image(answer.shape, "color", answer.color);
     }
 
     // New rule transformations
     //
-    // Shapes are different and *must* be defined before the transformations,
-    // so we skip them here.
-    if (new_rule_type !== undefined && new_rule_type != "shape") {
+    // Shapes are different.
+    if (new_rule_type != "shape") {
       var rule_value = utils.get_random_item(undefined_rules);
       undefined_rules.delete(rule_value);
       answer[new_rule_type] = rule_value;
-      answer.shape = transform_image(answer.shape, new_rule_type, rule_value);
     }
 
     answers.push(answer);
@@ -190,11 +185,11 @@ export function get_new_rule_round(
   new_rule_type,
   num_images
 ) {
-  var word = get_random_word();
+  var word_we_are_defining = get_random_word();
   var answers = get_n_answers(num_images, rule_constraints, new_rule_type);
-  var prompt = get_prompt(rule_constraints, word);
+  var prompt = get_prompt(rule_constraints, word_we_are_defining);
   return {
-    word: word,
+    word_we_are_defining: word_we_are_defining,
     prompt: prompt,
     answers: answers,
   };
@@ -218,26 +213,23 @@ function transform_answer(rule_constraints) {
   return rule_constraints.shape;
 }
 
-// I hate all of this code.  The entire file.  Kill me.
-function get_random_fully_transformed_answer() {
-  var rule_constraints = {};
+function get_random_answer() {
+  var answer = {};
   for (const key in RULES) {
     if (Object.keys(RULES[key]).length == 0) {
       continue;
     }
-    rule_constraints[key] = RULES[key][utils.get_random_key(RULES[key])];
+    answer[key] = RULES[key][utils.get_random_key(RULES[key])];
   }
-  var prompt = get_prompt(rule_constraints);
-  return {
-    name: prompt,
-    shape: transform_answer(rule_constraints),
-  };
+  var name = get_prompt(answer);
+  answer.name = name;
+  return answer;
 }
 
 export function get_existing_rule_round(total_answers) {
   var answers = [];
   for (var i = 0; i < total_answers; i++) {
-    answers.push(get_random_fully_transformed_answer());
+    answers.push(get_random_answer());
   }
 
   // We don't want the winning answer to always be at the beginning!
@@ -257,36 +249,39 @@ export function get_existing_rule_round(total_answers) {
 //
 //
 
-// Round 1 (new rule)
+// // Round 1 (new rule)
 // var rule_constraints = {};
 // var rule_type = "shape";
 // var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
-// console.log({ new_rule_round });
 // console.log(">>> Define the " + new_rule_round.prompt);
+// console.log(new_rule_round);
 // var answer = new_rule_round.answers[0];
 // console.log(
-//   `Defining word ${new_rule_round.word} as ${rule_type} ${answer.shape}`
+//   `Defining word ${new_rule_round.word_we_are_defining} as ${rule_type} ${answer.shape}`
 // );
-// define_rule(rule_type, new_rule_round.word, answer.shape);
+// define_rule(rule_type, new_rule_round.word_we_are_defining, answer.shape);
 
 // // Round 2 (existing rules)
 // var existing_rule_round = get_existing_rule_round(3);
 // console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
+// console.log(existing_rule_round);
 
 // // Round 3 (new rule)
 // var rule_constraints = { shape: answer.shape };
 // var rule_type = "color";
 // var new_rule_round = get_new_rule_round(rule_constraints, rule_type, 3);
 // console.log(">>> Define the " + new_rule_round.prompt);
+// console.log(new_rule_round);
 // var answer = new_rule_round.answers[0];
 // console.log(
-//   `Defining word ${new_rule_round.word} as ${rule_type} ${answer.color}`
+//   `Defining word ${new_rule_round.word_we_are_defining} as ${rule_type} ${answer.color}`
 // );
-// define_rule(rule_type, new_rule_round.word, answer.color);
+// define_rule(rule_type, new_rule_round.word_we_are_defining, answer.color);
 
 // // Round 4 (existing rules)
 // var existing_rule_round = get_existing_rule_round(3);
 // console.log(`>>> Find the ${existing_rule_round.correct_answer.name}`);
+// console.log(existing_rule_round);
 
 // // Miscellaneous testing.
 // p(" ");
