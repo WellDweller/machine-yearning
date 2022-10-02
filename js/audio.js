@@ -40,8 +40,6 @@ var SOUNDS = {
 	]
 }
 
-// TODO: Preload?
-
 export function play(name, vary_pitch, volume) {
 	var layers = SOUNDS[name];
 	volume = volume === undefined ? 1.0 : volume;
@@ -59,5 +57,16 @@ export function play(name, vary_pitch, volume) {
 	    sound.play();
 	}
 }
+
+export var theme_song = new Audio('sounds/theme draft.mp3');
+theme_song.addEventListener('timeupdate', function(){
+    var buffer = .44;
+    if(this.currentTime > this.duration - buffer){
+        this.currentTime = 0;
+        this.play();
+    }
+});
+
+window.theme_song = theme_song;
 
 window.play = play;

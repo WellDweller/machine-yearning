@@ -1,6 +1,7 @@
 import { getRandomImageDataUrl } from "./image_generation.js";
 import { get_round_data, validate_round } from "./round.js";
 import { get_random_int_in_range } from "./utils.js";
+import { theme_song } from "./audio.js";
 
 /*
 - color transformation
@@ -195,6 +196,17 @@ function updateLives({ decrement } = { decrement: false }) {
 }
 
 function setupGame() {
+
+  // We can't play sound until the user interacts.  So as soon as they
+  // click anywhere, we'll blast em with our theme song.
+  window.theme_started = false;
+  document.body.addEventListener('click', function() {
+    if (!window.theme_started) {
+      theme_song.play();
+      window.theme_started = true;
+    }
+  }, true);
+
   updateLives();
   //  Kick if off
   updateGameState(GAME_STATES.IN_PROGRESS);
