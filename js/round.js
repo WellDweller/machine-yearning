@@ -149,16 +149,17 @@ function generateRandomRound(roundNumber) {
   // How many times we've looped over the initial round structure
   const loopCount = Math.floor(roundNumber / INITIAL_NUM_ROUNDS);
   // Get the hard coded round for this index
-  const round = ROUNDS[wrappedIndex];
+  const round = { ...ROUNDS[wrappedIndex] };
   // Increase the complexity a little, but keep the other attributes the same
   round.imageSize = round.imageSize + loopCount;
   // Never show more than 9 answers
   round.numAnswers = Math.min(round.numAnswers + loopCount, 9);
 
-  if ((round.roundType = ROUND_TYPES.EXISTING_RULE)) {
+  if (round.roundType === ROUND_TYPES.EXISTING_RULE) {
     round.rulesToRandomize = ["shape", "color"];
   }
 
   ROUNDS.push(round);
+
   return round;
 }
