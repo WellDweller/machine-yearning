@@ -76,7 +76,11 @@ export function validate_round(roundNum, answerIndex) {
   const round = ROUNDS[roundNum];
   if (round.roundType === ROUND_TYPES.NEW_RULE) {
     const answer = currentRoundData.answers[answerIndex];
-    define_rule(round.ruleType, currentRoundData.word, answer.shape);
+    define_rule(
+      round.ruleType,
+      currentRoundData.word_we_are_defining,
+      answer.shape
+    );
     return true;
   } else {
     // Existing round
