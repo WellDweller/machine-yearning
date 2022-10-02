@@ -48,6 +48,7 @@ $slots.addEventListener("click", (e) => {
       } else {
         slot.classList.remove("selected");
       }
+      play("basic_click_02", true, 0.80);
     });
   }
 });
@@ -92,6 +93,7 @@ function endRound() {
     // Didn't select before the time ran out;
 
     // Lose a life
+    play("failure_02", true, 0.7);
     updateLives({ decrement: true });
     // Begin the round again
     startRound();
@@ -99,8 +101,10 @@ function endRound() {
   } else {
     const result = validate_round(roundNumber, selectedIndex);
     if (result) {
+      play("mouth_pop", true, 0.9);
       console.log("CORRECT");
     } else {
+      play("failure_02", true, 0.7);
       updateLives({ decrement: true });
     }
   }

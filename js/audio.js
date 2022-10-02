@@ -61,6 +61,7 @@ var SOUNDS = {
 	],
 	"crisp_click": [[new Audio("sounds/crisp_click.mp3")]],
 	"basic_click": [[new Audio("sounds/basic_click_01.mp3")]],
+	"basic_click_02": [[new Audio("sounds/basic_click_02.mp3")]],
 	"mouth_pop": [
 		[
 			new Audio("sounds/mouth_pop_01.mp3"),
