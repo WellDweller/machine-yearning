@@ -1,4 +1,4 @@
-import { get_random_int_in_range, clamp } from "./utils.js";
+import { get_random_int_in_range } from "./utils.js";
 
 // add metadata
 // add ability to download
