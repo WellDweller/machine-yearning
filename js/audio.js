@@ -28,6 +28,11 @@ var SOUNDS = {
 			new Audio("sounds/success_low_03.mp3"),
 		],
 	],
+	"success_single": [
+		[
+			new Audio("sounds/success_single.mp3"),
+		],
+	],
 	"spaceship_falling": [
 		[
 			new Audio("sounds/spaceship_falling.mp3"),
