@@ -114,7 +114,7 @@ function generateRandomRound(roundNumber) {
     round = {
       roundType: ROUND_TYPES.NEW_RULE,
       ruleType: "shape",
-      ruleConstraints: [],
+      rulesToBeConsistent: [],
       numAnswers: get_random_int_in_range(4, 9),
     };
   } else {
