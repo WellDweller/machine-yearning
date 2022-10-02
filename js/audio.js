@@ -37,7 +37,22 @@ var SOUNDS = {
 		[
 			new Audio("sounds/spaceship_falling.mp3"),
 		],
-	]
+	],
+	"beep_bright": [
+		[
+			new Audio("sounds/beep_bright.mp3"),
+		],
+	],
+	"beep_muffled": [
+		[
+			new Audio("sounds/beep_muffled.mp3"),
+		],
+	],
+	"ui_confirm": [
+		[
+			new Audio("sounds/ui_confirm_01.mp3"),
+		],
+	],
 }
 
 export function play(name, vary_pitch, volume) {
