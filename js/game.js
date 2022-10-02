@@ -276,7 +276,9 @@ function endGame() {
     "beforeEnd",
     /* html */ `
     <p>${closing_line}</p>
-    <p>You completed <b>${roundNumber} rounds.</b></p>
+    <p>You completed <b>${roundNumber} round${
+      roundNumber !== 1 ? "s" : ""
+    }.</b></p>
   `
   );
 
