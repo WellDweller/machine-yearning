@@ -76,11 +76,21 @@ export function validate_round(roundNum, answerIndex) {
   const round = ROUNDS[roundNum];
   if (round.roundType === ROUND_TYPES.NEW_RULE) {
     const answer = currentRoundData.answers[answerIndex];
-    define_rule(
-      round.ruleType,
-      currentRoundData.word_we_are_defining,
-      answer.shape
-    );
+    if (round.ruleType == "shape") {
+      define_rule(
+        round.ruleType,
+        currentRoundData.word_we_are_defining,
+        answer.shape
+      );
+    } else if (round.ruleType == "color") {
+      define_rule(
+        round.ruleType,
+        currentRoundData.word_we_are_defining,
+        answer.color
+      );
+    } else {
+      console.log(`Unknown rule type ${round.ruleType}`);
+    }
     return true;
   } else {
     // Existing round
