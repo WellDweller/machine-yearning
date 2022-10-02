@@ -93,10 +93,12 @@ function startRound() {
   setupSlots(answers);
 
   startTimer();
+  play("riser", false, 0.6);
 }
 
 function endRound() {
   stopTimer();
+  stop("riser");
 
   if (selectedIndex === null) {
     console.log("FAILED: TIME EXPIRED");
