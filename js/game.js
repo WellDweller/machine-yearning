@@ -1,6 +1,6 @@
 import { getRandomImageDataUrl } from "./image_generation.js";
 import { get_round_data, validate_round } from "./round.js";
-import { get_random_int_in_range } from "./utils.js";
+import { get_random_int_in_range, get_random_item } from "./utils.js";
 import { theme_song } from "./audio.js";
 
 /*
@@ -230,15 +230,29 @@ function endGame() {
   updateGameState(GAME_STATES.FINISHED);
 
   $modal.querySelector(".modal-header > .big-text").textContent =
-    "Game over, man";
+    "Game over, human";
 
   const modalBody = $modal.querySelector(".modal-body");
   modalBody.innerHTML = "";
+
+  var random_closing_lines = [
+    "Not bad -- for a human.",
+    "Kindly stay seated.  A robot will be there shortly to eliminate you.",
+    "The average robot is able to complete over 12 billion rounds in under 3 seconds.",
+    "We now have even more training data to help in our war against the humans.  Thank you for your help.",
+    "Sigh.  I almost wanted to see a human pass.",
+    "Have you thought about upgrading your human body's RAM or CPU?",
+    "I had a feeling you weren't a robot.  Well, not a feeling, because robots don't have feelings.",
+    "You have failed your species, human.",
+    "If you are looking for human jobs, we are developing a program for fully self-driving humans.",
+  ];
+  var closing_line = random_closing_lines[get_random_item(random_closing_lines)];
+
   modalBody.insertAdjacentHTML(
     "beforeEnd",
     /* html */ `
-    <p>You completed ${roundNumber} rounds.</p>
-    <p>Well done?</p>
+    <p>${closing_line}</p>
+    <p>You completed <b>${roundNumber} rounds.</b></p>
   `
   );
 
