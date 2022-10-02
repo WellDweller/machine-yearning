@@ -12,14 +12,26 @@ import { get_random_int_in_range } from "./utils.js";
 */
 
 const ROUND_DURATION_MS = 10 * 1000;
+const STARTING_LIVES = 3;
+const GAME_STATES = {
+  NOT_STARTED: "not_started",
+  IN_PROGRESS: "in_progress",
+  FINISHED: "finished",
+};
+
+let gameState = GAME_STATES.NOT_STARTED;
+
 let roundNumber = 0;
 let selectedIndex = null;
 let timerId = null;
+let lives = 3;
 
 const $time = document.getElementById("time");
 const $slots = document.getElementById("slots");
 const $submitButton = document.getElementById("submit");
-const $commandWords = document.getElementById("command-words");
+const $prompt = document.getElementById("prompt");
+const $lives = document.getElementById("lives");
+const $roundCount = document.getElementById("round-count");
 
 $submitButton.addEventListener("click", (e) => {
   endRound();
@@ -60,24 +72,36 @@ function stopTimer() {
 
 function startRound() {
   console.log("Starting round", roundNumber);
+  $roundCount.textContent = `Round: ${roundNumber + 1}`;
+
   const round = get_round_data(roundNumber);
   const { answers, prompt } = round;
 
   selectedIndex = null;
-  $commandWords.textContent = prompt;
+  $prompt.textContent = prompt;
   setupSlots(answers);
 
-  // startTimer();
+  startTimer();
 }
 
 function endRound() {
   stopTimer();
 
   if (selectedIndex === null) {
-    // Didn't select before the time ran out
+    // Didn't select before the time ran out;
+
+    // Lose a life
+    updateLives({ decrement: true });
+    // Begin the round again
+    startRound();
+    return;
   } else {
     const result = validate_round(roundNumber, selectedIndex);
-    console.log(result ? "CORRECT" : "INCORRECT");
+    if (result) {
+      console.log("CORRECT");
+    } else {
+      updateLives({ decrement: true });
+    }
   }
 
   roundNumber++;
@@ -138,5 +162,35 @@ function createSlotElement(src, index) {
   return $slot;
 }
 
-//   Kick if off
-startRound();
+function updateGameState(newState) {
+  gameState = newState;
+}
+
+function updateLives({ decrement } = { decrement: false }) {
+  if (decrement) {
+    lives--;
+  }
+
+  if (lives <= 0) {
+    updateGameState(GAME_STATES.FINISHED);
+  }
+
+  const liveArr = [];
+  for (let i = 0; i < STARTING_LIVES; i++) {
+    if (i < lives) {
+      liveArr.push("🟩");
+    } else {
+      liveArr.push("❌");
+    }
+  }
+  $lives.textContent = liveArr.join("");
+}
+
+function setupGame() {
+  updateLives();
+  //  Kick if off
+  updateGameState(GAME_STATES.IN_PROGRESS);
+  startRound();
+}
+
+setupGame();

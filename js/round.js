@@ -81,8 +81,8 @@ export function validate_round(roundNum, answerIndex) {
   } else {
     // Existing round
     return (
-      currentRoundData.correct_answer.shape ===
-      currentRoundData.answers[answerIndex].shape
+      currentRoundData.correct_answer.name ===
+      currentRoundData.answers[answerIndex].name
     );
   }
 }
