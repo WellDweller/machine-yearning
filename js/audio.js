@@ -119,7 +119,7 @@ export function stop(name) {
 
 window.stop = stop;
 
-export var theme_song = new Audio('sounds/theme draft.mp3');
+export var theme_song = new Audio('sounds/theme.mp3');
 theme_song.addEventListener('timeupdate', function(){
     var buffer = .44;
     if(this.currentTime > this.duration - buffer){
