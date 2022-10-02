@@ -22,15 +22,12 @@ const $submitButton = document.getElementById("submit");
 const $commandWords = document.getElementById("command-words");
 
 $submitButton.addEventListener("click", (e) => {
-  console.log("Do something on submit");
   endRound();
 });
 
 $slots.addEventListener("click", (e) => {
   if (e.target.dataset.type === "image") {
     selectedIndex = e.target.dataset.id;
-
-    console.log({ selectedIndex });
 
     $slots.querySelectorAll(".slot").forEach((slot) => {
       if (slot === e.target.parentElement) {
@@ -80,7 +77,7 @@ function endRound() {
     // Didn't select before the time ran out
   } else {
     const result = validate_round(roundNumber, selectedIndex);
-    console.log(result);
+    console.log(result ? "CORRECT" : "INCORRECT");
   }
 
   roundNumber++;
@@ -97,7 +94,7 @@ function setupSlots(answers) {
   clearSlots();
   for (let i = 0; i < answers.length; i++) {
     const src = answers[i].shape;
-    console.log(src);
+    // console.log(src);
     const $slot = createSlotElement(src, i);
     $slots.appendChild($slot);
   }
