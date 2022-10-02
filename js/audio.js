@@ -1,5 +1,8 @@
 import * as utils from './utils.js';
 
+var MUSIC_VOLUME = 1.0;
+var FX_VOLUME = 1.0;
+
 var SOUNDS = {
 	"bleep": [
 		[
@@ -100,7 +103,7 @@ export function play(name, vary_pitch, volume) {
 	    } else {
 	    	sound.playbackRate = 1.0;
 	    }
-	    sound.volume = utils.get_random_in_range(0.9, 1.0) * volume;
+	    sound.volume = utils.get_random_in_range(0.9, 1.0) * volume * FX_VOLUME;
 	    sound.currentTime = 0;
 	    sound.play();
 	}
@@ -130,3 +133,19 @@ theme_song.addEventListener('timeupdate', function(){
 });
 
 window.theme_song = theme_song;
+
+export function set_music_volume(volume) {
+	MUSIC_VOLUME = volume;
+	theme_song.volume = volume;
+}
+
+window.set_music_volume = set_music_volume;
+
+// Since we're not storing the volumes directly on the objects, we don't know
+// what they were intended to be played at.  So instead, an update to this will
+// change any future FX volumes.
+export function set_fx_volume(volume) {
+	FX_VOLUME = volume;
+}
+
+window.set_fx_volume = set_fx_volume;

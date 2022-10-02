@@ -201,6 +201,10 @@ function updateLives({ decrement } = { decrement: false }) {
 
 function setupGame() {
 
+  // Volume
+  set_music_volume(0.8);
+  set_fx_volume(0.8);
+
   // We can't play sound until the user interacts.  So as soon as they
   // click anywhere, we'll blast em with our theme song.
   window.theme_started = false;
