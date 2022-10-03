@@ -190,7 +190,7 @@ function get_random_word() {
   var consonants = "bcdfghjklmnpqrstvwxz";
   var consonants = ["b", "c", "ch", "th", "sh", "d", "f", "g", "h", "gh", "j", "k", "l", "m", "n", "p", "r", "s", "t", "st", "v", "w"];
   var vowels = "aeiou";
-  var vowels = ["a", "e", "ee", "i", "o", "oo", "u"];
+  var vowels = ["a", "e", "ee", "i", "o", "oo", "u", "ou"];
   var min = 3;
   var max = 6;
   var length = Math.random() * (max - min) + min;
