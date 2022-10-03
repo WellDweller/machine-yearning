@@ -19,10 +19,6 @@ It might be nice to figure this out on your own, but if you're getting frustrate
  * Music & FX -- @daniel-username (https://soundcloud.com/d-a-n-i-e-l-2-3)
  * Ate hot pockets -- @madlee
 
-## Source Code
-
-https://github.com/WellDweller/machine-yearning
-
 ## Mobile Compatibility
 
 The game should work on mobile!
