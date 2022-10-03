@@ -82,18 +82,26 @@ var SOUNDS = {
 			new Audio("sounds/spaceship_falling.mp3"),
 		],
 	],
-	"failure": [
-		[
-			new Audio("sounds/failure.mp3"),
-		],
-	],
+	// "failure": [
+	// 	[
+	// 		new Audio("sounds/failure.mp3"),
+	// 	],
+	// ],
 	"failure_02": [[new Audio("sounds/failure_02.mp3")]],
 	"riser": [[new Audio("sounds/riser.mp3")]],
 }
 
-export function play(name, vary_pitch, volume) {
+var VOLUME_MAP = {
+	"basic_click_02": 0.8,
+	"riser":  0.6,
+	"failure_02": 0.7,
+	"mouth_pop": 0.9,
+	"spaceship_falling": 0.5,
+}
+
+export function play(name, vary_pitch) {
 	var layers = SOUNDS[name];
-	volume = volume === undefined ? 1.0 : volume;
+	var volume = VOLUME_MAP[name];
 	for (const layer of layers) {
 		var sound = layer[utils.get_random_item(layer)];
 	    sound.mozPreservesPitch = false;
@@ -143,6 +151,20 @@ export function set_music_volume(volume) {
 // change any future FX volumes.
 export function set_fx_volume(volume) {
 	FX_VOLUME = volume;
+
+	// Update any actively playing sounds.
+	for (var name in SOUNDS) {
+		var volume_map_volume = VOLUME_MAP[name];
+		var layers = SOUNDS[name];
+		for (const layer of layers) {
+			for (const sound of layer) {
+				console.log(name);
+				console.log(volume, volume_map_volume);
+			    sound.volume = volume * volume_map_volume;
+			}
+		}
+	}
+
 }
 
 export function get_music_volume(){

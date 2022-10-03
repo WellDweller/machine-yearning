@@ -80,7 +80,7 @@ $slots.addEventListener("click", (e) => {
       } else {
         slot.classList.remove("selected");
       }
-      play("basic_click_02", true, 0.8);
+      play("basic_click_02", true);
     });
   }
 });
@@ -139,7 +139,7 @@ function startRound() {
     setupSlots(answers);
 
     startTimer();
-    play("riser", false, 0.6);
+    play("riser", false);
     break;
   }
 }
@@ -153,7 +153,7 @@ function endRound() {
     // Didn't select before the time ran out;
 
     // Lose a life
-    play("failure_02", true, 0.7);
+    play("failure_02", true);
     updateLives({ decrement: true });
     if (lives <= 0) {
       endGame();
@@ -165,11 +165,11 @@ function endRound() {
   } else {
     const result = validate_round(roundNumber, selectedIndex);
     if (result) {
-      play("mouth_pop", true, 0.9);
+      play("mouth_pop", true);
       console.log("CORRECT");
     } else {
       console.log("FAILED: INCORRECT");
-      play("failure_02", true, 0.7);
+      play("failure_02", true);
       updateLives({ decrement: true });
       if (lives <= 0) {
         endGame();
@@ -276,7 +276,7 @@ function setupGame() {
 
 function endGame() {
   updateGameState(GAME_STATES.FINISHED);
-  play("spaceship_falling", false, 0.5);
+  play("spaceship_falling", false);
 
   $modal.querySelector(".modal-header > .big-text").textContent =
     "Game over, human";
