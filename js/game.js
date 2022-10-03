@@ -7,14 +7,15 @@ import {
   hexColors,
   mapRange,
 } from "./utils.js";
-import { theme_song } from "./audio.js";
+import {
+  theme_song,
+  set_fx_volume,
+  set_music_volume,
+  get_music_volume,
+  get_fx_volume,
+} from "./audio.js";
 
 /*
-- color transformation
-- round end
-- requestAnimationFrame for timer instead of setInterval
-- Game begin state
-- Game end state
 - variable spacing
 */
 
@@ -42,6 +43,20 @@ const $lives = document.getElementById("lives");
 const $roundCount = document.getElementById("round-count");
 const $modal = document.getElementById("modal");
 const $timeBar = document.getElementById("time-bar");
+const $muteButton = document.getElementById("mute-button");
+
+$muteButton.addEventListener("click", (e) => {
+  if (get_music_volume() !== 0 || get_music_volume() !== 0) {
+    // Mute!
+    set_music_volume(0);
+    set_fx_volume(0);
+    $muteButton.textContent = "🔇";
+  } else {
+    set_music_volume(0.8);
+    set_fx_volume(0.8);
+    $muteButton.textContent = "🔊";
+  }
+});
 
 $modal.addEventListener("click", (e) => {
   if (e.target.dataset.action === "modal-close") {
