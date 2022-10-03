@@ -188,17 +188,21 @@ function get_n_answers(n, rule_constraints, new_rule_type, image_size) {
 
 function get_random_word() {
   var consonants = "bcdfghjklmnpqrstvwxz";
+  var consonants = ["b", "c", "ch", "th", "sh", "d", "f", "g", "h", "gh", "j", "k", "l", "m", "n", "p", "r", "s", "t", "st", "v", "w"];
   var vowels = "aeiou";
+  var vowels = ["a", "e", "ee", "i", "o", "oo", "u"];
   var min = 3;
-  var max = 7;
+  var max = 6;
   var length = Math.random() * (max - min) + min;
   var word = "";
   var pick_from_consonants = true;
   for (var i = 0; i < length; i++) {
     if (pick_from_consonants) {
-      word += consonants.charAt(Math.floor(Math.random() * consonants.length));
+      //word += consonants.charAt(Math.floor(Math.random() * consonants.length));
+      word += consonants[Math.floor(Math.random() * consonants.length)];
     } else {
-      word += vowels.charAt(Math.floor(Math.random() * vowels.length));
+      //word += vowels.charAt(Math.floor(Math.random() * vowels.length));
+      word += vowels[Math.floor(Math.random() * vowels.length)];
     }
     pick_from_consonants = !pick_from_consonants;
   }
