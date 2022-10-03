@@ -98,7 +98,8 @@ function runTimer() {
   $time.textContent = Math.max(0, msRemaining);
   const percentElapsed = 100 - (msRemaining / ROUND_DURATION_MS) * 100;
   const percentRemaing = 100 - percentElapsed;
-  $timeBar.style.top = `${percentElapsed}%`;
+  // $timeBar.style.top = `${percentElapsed}%`;
+  $timeBar.style.transform = `scaleY(${percentRemaing / 100})`;
 
   // we have an arbitrary number of hex colors, map the
   const hex =

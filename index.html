@@ -278,15 +278,16 @@
       }
 
       #time-bar {
-        border-radius: 0.2rem;
-        width: 100%;
         position: absolute;
-        background-color: var(--blue);
-        left: 0;
+        /* left: 0;
         right: 0;
         bottom: 0;
-        top: 0;
-        transition: top ease;
+        top: 0; */
+        height: 100%;
+        width: 100%;
+        background-color: var(--blue);
+        will-change: transform;
+        transform-origin: bottom;
         border-radius: 0;
       }
 
@@ -324,10 +325,9 @@
   </head>
   <body>
     <div id="game-container">
-      <div id="time-bar">
-        <div id="time-remaining">
-          <div id="time" class="big-text">10000</div>
-        </div>
+      <div id="time-bar"></div>
+      <div id="time-remaining">
+        <div id="time" class="big-text">10000</div>
       </div>
       <div id="mute"><button id="mute-button">🔊</button></div>
       <div id="game">
