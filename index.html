@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="images/dancing-robot.gif">
+    <link rel="icon" href="images/dancing-robot.gif" />
     <title>Machine Yearning</title>
     <!-- <link
       rel="stylesheet"
@@ -139,15 +139,20 @@
         aspect-ratio: 1;
         user-select: none;
         position: relative;
+        will-change: transform;
       }
 
       .slot.selected {
         /* border: 1px solid var(--darkBlue); */
         outline: 6px solid var(--red);
+        animation-name: Shake;
+        animation-duration: 600ms;
+        animation-timing-function: ease;
       }
 
       .slot:hover {
         /* background-color: var(--lightGrey); */
+        /* transform: scale(1.05); */
       }
 
       .slot img {
@@ -317,6 +322,24 @@
 
         #dancing-robot {
           width: 50px;
+        }
+      }
+
+      @keyframes Shake {
+        0% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-15px);
+        }
+        60% {
+          transform: translateY(0);
+        }
+        80% {
+          transform: translateY(-7px);
+        }
+        100% {
+          transform: translateY(0);
         }
       }
     </style>
