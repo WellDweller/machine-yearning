@@ -1,5 +1,6 @@
 import { getRandomImageDataUrl } from "./image_generation.js";
 import { get_round_data, validate_round } from "./round.js";
+import { reset_all_rules } from "./engine.js";
 import {
   get_random_int_in_range,
   get_random_item,
@@ -309,6 +310,7 @@ function startGame() {
   //  Start the Game!
   lives = STARTING_LIVES;
   updateLives();
+  reset_all_rules();
   roundNumber = 0;
 
   updateGameState(GAME_STATES.IN_PROGRESS);

@@ -30,12 +30,21 @@ var POTENTIAL_RULES = {
   size: ["small", "medium", "large"],
 };
 
-window.RULES = {
+let RULES = {
   shape: {},
   color: {},
   rotation: {},
   size: {},
 };
+
+export function reset_all_rules() {
+  RULES = {
+    shape: {},
+    color: {},
+    rotation: {},
+    size: {},
+  };
+}
 
 export function define_rule(rule_type, name, value) {
   console.assert(rule_type in RULES, `Unknown rule ${rule_type}`);
