@@ -158,8 +158,6 @@ export function set_fx_volume(volume) {
 		var layers = SOUNDS[name];
 		for (const layer of layers) {
 			for (const sound of layer) {
-				console.log(name);
-				console.log(volume, volume_map_volume);
 			    sound.volume = volume * volume_map_volume;
 			}
 		}
