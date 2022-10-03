@@ -192,7 +192,7 @@ function get_random_word() {
   var vowels = "aeiou";
   var vowels = ["a", "e", "ee", "i", "o", "oo", "u", "ou"];
   var min = 3;
-  var max = 6;
+  var max = 5;
   var length = Math.random() * (max - min) + min;
   var word = "";
   var pick_from_consonants = true;
