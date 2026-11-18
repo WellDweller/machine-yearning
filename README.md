@@ -1,6 +1,6 @@
 # Machine Yearning
 
-[![screenshot.png](https://static.jam.host/raw/3b8/44/z/4ff84.png)](https://welldweller.github.io/machine-yearning/)
+[![screenshot.png](https://static.ldjam.com/raw/3b8/44/z/4ff84.png)](https://welldweller.github.io/machine-yearning/)
 
 Our entry for [Ludum Dare 51](https://ldjam.com/events/ludum-dare/51/machine-yearning).
 
@@ -23,4 +23,4 @@ It might be nice to figure this out on your own, but if you're getting frustrate
 
 The game should work on mobile!
 
-![unknown.png](https://static.jam.host/raw/3b8/44/z/4ffa2.png)
+![unknown.png](https://static.ldjam.com/raw/3b8/44/z/4ffa2.png)
